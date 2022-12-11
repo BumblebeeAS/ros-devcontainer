@@ -6,13 +6,32 @@ Packed with:
 - Tasks definition to run catkin_make, roscore, rviz commands.
 - Preconfigured code completion for C++, Python, XML (package.xml, launchfiles, URDF, SDF).
 - Preconfigured simulation environments (Flatland, TurtleBot3, ARIAC, Virtual RobotX, UUV).
-- Bonus: WebIDE (Theia) with preconfigured C++, Python, XML completion.
+<!-- - Bonus: WebIDE (Theia) with preconfigured C++, Python, XML completion. -->
+
+## Adding a new sim:
+- the dockwater repo contains some useful Dockerfiles that can be used as a base image for the other containers. 
+### To insert a new simulation:
+  1. Add a folder under simulators containing the docker image of the simulation
+  2. Add the image to the `index.yaml` file under `simulator-index`
+
+### To build/run the ros-devcontainer:
+  - if you use the experimental features of docker, you can try running `docker buildx bake build` to build all required images.
+    - `xserver`: supports the display of the desktop novnc environment at localhost:3000 (default port)
+    - `simulator-index`: tool to select simulator from `index.yaml` and modify the `docker-compose.yml` launch file.
+    - `ros-index`: tool to select the desired ros version from `index.yaml` and modify the `docker-compose.yml` launch file
+    - `noetic_dev` or `melodic_dev` etc: contains the ros environment for the development container. Contains useful tools and should contain all packages that we might require.
+    - `uuv_simulator`
+  - Alternatively, just build or pull all images in the termminal or with some script.
+  - Specify the workspace you want to bind to the workspace container by changing the volume under workspace in `docker-compose`. Also configure any settings you want within `docker-compose`
+  - Run `docker-compose up` to launch the `xserver`, `simulation` container and the ros workspace container. Ensure the `DISPLAY` env variable is set correctly. You should be able to see any guis by visiting `localhost:3000`.
+  - In a new shell, run `./join.bash <container_name>` e.g. `./join.bash ros-devcontainer-workspace-1` to start a shell in the container.
+
 
 VSCode and devcontainer running on Mac:
 ![screenshot](https://user-images.githubusercontent.com/18067/58605055-8dc84980-82d1-11e9-8ee5-dc969fcb2ae1.png)
 
-WebIDE (Theia) opened from the local browser while devcontainer is running on the remote server:
-![screenshot-theia](https://user-images.githubusercontent.com/18067/59972289-58a8d180-95c7-11e9-86fd-7d271684e8b3.PNG)
+<!-- WebIDE (Theia) opened from the local browser while devcontainer is running on the remote server:
+![screenshot-theia](https://user-images.githubusercontent.com/18067/59972289-58a8d180-95c7-11e9-86fd-7d271684e8b3.PNG) -->
 
 How to select simulation environment
 -------------------------------------
@@ -25,33 +44,14 @@ $ ./select-simulator.sh
 
 Preconfigured simulation environment currently includes: Flatland, TurtleBot3, ARIAC, Virtual RobotX, UUV.
 
-See the following index for list of current simulators:
+<!-- See the following index for list of current simulators:
 
-https://github.com/devrt/simulator-index/blob/master/index.yaml
+https://github.com/devrt/simulator-index/blob/master/index.yaml -->
 
-If you want any other simulator, let us know by submitting the issue:
+<!-- If you want any other simulator, let us know by submitting the issue:
 
-https://github.com/devrt/simulator-index/issues
+https://github.com/devrt/simulator-index/issues -->
 
-How to use the WebIDE (recommended)
--------------------------------------
-As of writing, docker-compose support of VSCode is not so stable on all the platforms.
-We recommend using Theia WebIDE since it has complete VSCode function support after 1.0 release.
-
-1. Clone this repository:
-```shell
-$ git clone https://github.com/devrt/ros-devcontainer-vscode.git
-```
-
-2. Enter the following command under the folder of the cloned project:
-```shell
-$ cd ros-devcontainer-vscode
-$ docker-compose up
-```
-
-3. Open http://localhost:3001/ using your favorite browser.
-
-You can also use remote server to host the devcontainer (run `docker-compose up` on the remote server and open `http://[remote-server]:3001`).
 
 How to use this dev container with VSCode
 -----------------------------------------

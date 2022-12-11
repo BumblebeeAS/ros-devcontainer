@@ -9,11 +9,9 @@
 	"extensions": [
 		"ms-vscode.cpptools",
 		"ms-python.python",
-		"ajshort.msg",
+		"ms-iot.vscode-ros",
 		"twxs.cmake",
-		"redhat.vscode-xml",
-		"actboy168.tasks",
-		"brpaz.file-templates"
+		"redhat.vscode-xml"
     ],
     //"appPort": [80],
 }

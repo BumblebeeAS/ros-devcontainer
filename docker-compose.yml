@@ -1,47 +1,65 @@
-version: '2.3'
+version: '2.4'
 services:
   xserver:
     image: devrt/xserver
     ipc: host
     security_opt:
-    - seccomp:unconfined
+      - seccomp:unconfined
     ports:
-    - "3000:80"
+      - "3000:80"
     healthcheck:
-      test: ["CMD-SHELL", "test -e /tmp/.X11-unix/X0"]
+      test: ["CMD-SHELL", "test -e /tmp/.X11-unix/X1"]
       interval: "1s"
       retries: 20
   simulator:
-    image: devrt/simulator-empty
+    image: "ngxingyu/simulator_vrx"
     ipc: host
     security_opt:
-    - seccomp:unconfined
+      - seccomp:unconfined
     environment:
-    - DISPLAY=:0
+      - DISPLAY=:0
+      - QT_X11_NO_MITSHM=1
     volumes_from:
-    - xserver
+      - xserver
+    volumes:
+      - /dev/dri # for intel gpu
     depends_on:
-    - xserver
+      - xserver
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    runtime: nvidia
   workspace:
     # env_file:
     #   - .env
-    image: devrt/ros-devcontainer-vscode:melodic-desktop
+    image: ngxingyu/ros-devcontainer:noetic-desktop
     ipc: host
     security_opt:
-    - seccomp:unconfined
+      - seccomp:unconfined
     ports:
-    - "3001:3000"
-    - "3002:8888"
+      - "3001:3000"
+      - "3002:8888"
     volumes:
-    - workspace:/workspace
-    - ~/.gitconfig:/home/developer/.gitconfig
+      - workspace:/workspace # persist the devel / install folder across sessions
+      - ../bbauv_ws/src:/workspace/src # bind-mount your own workspace in the workspace container
     environment:
-    - DISPLAY=:0
-    - ROS_MASTER_URI=http://simulator:11311/
+      - DISPLAY=:0
+      - ROS_MASTER_URI=http://simulator:11311/
     volumes_from:
-    - xserver
-    - simulator
+      - xserver
+      - simulator
     depends_on:
-    - xserver
+      - xserver
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
 volumes:
-  workspace:
+  workspace: # volume

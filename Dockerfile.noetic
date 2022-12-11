@@ -1,6 +1,6 @@
-ARG BASE_IMAGE=ros:melodic
+ARG BASE_IMAGE=ghcr.io/ngxingyu/dockwater:noetic
 
-FROM maven AS xsdcache
+FROM maven:3.8.6-openjdk-18 AS xsdcache
 
 # install schema-fetcher
 RUN microdnf install git && \
@@ -27,7 +27,7 @@ RUN mkdir -p /opt/xsd/urdf && \
 
 FROM $BASE_IMAGE
 
-MAINTAINER Yosuke Matsusaka <yosuke.matsusaka@gmail.com>
+ENV USER=developer
 
 SHELL ["/bin/bash", "-c"]
 
@@ -39,6 +39,12 @@ RUN rm /etc/apt/apt.conf.d/docker-clean
 
 # use closest mirror for apt updates
 RUN sed -i -e 's/http:\/\/archive/mirror:\/\/mirrors/' -e 's/http:\/\/security/mirror:\/\/mirrors/' -e 's/\/ubuntu\//\/mirrors.txt/' /etc/apt/sources.list
+
+# Setup locale
+RUN apt update && sudo apt install locales \
+  && locale-gen en_US en_US.UTF-8 \
+  && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 \
+  && apt-get clean -qq
 
 RUN apt-get update || true && \
     apt-get install -y curl apt-transport-https ca-certificates && \
@@ -52,32 +58,25 @@ RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb
     curl -L http://packages.osrfoundation.org/gazebo.key | apt-key add -
 
 # nice to have nodejs for web goodies
-RUN sh -c 'echo "deb https://deb.nodesource.com/node_12.x `lsb_release -cs` main" > /etc/apt/sources.list.d/nodesource.list' && \
+RUN sh -c 'echo "deb https://deb.nodesource.com/node_14.x `lsb_release -cs` main" > /etc/apt/sources.list.d/nodesource.list' && \
     curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
 
 # install depending packages
 RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y bash-completion less wget vim-tiny iputils-ping net-tools openssh-client git openjdk-8-jdk-headless nodejs sudo imagemagick byzanz python-dev libsecret-1-dev && \
+    apt-get install -y bash-completion less wget vim-tiny iputils-ping net-tools openssh-client git openjdk-8-jdk-headless nodejs sudo imagemagick byzanz python3-dev libsecret-1-dev && \
     npm install -g yarn && \
     apt-get clean
 
 # basic python packages
-RUN if [ $(lsb_release -cs) = "focal" ]; then \
-        apt-get install -y python-is-python3; \
-        curl -kL https://bootstrap.pypa.io/get-pip.py | python; \
-    else \
-        curl -kL https://bootstrap.pypa.io/pip/2.7/get-pip.py | python; \
-    fi && \
-    pip install --upgrade --ignore-installed --no-cache-dir pyassimp pylint==1.9.4 autopep8 python-language-server[all] notebook~=5.7 Pygments matplotlib ipywidgets jupyter_contrib_nbextensions nbimporter supervisor supervisor_twiddler argcomplete
-
-# jupyter extensions
-RUN jupyter nbextension enable --py widgetsnbextension && \
-    jupyter contrib nbextension install --system
+RUN apt-get install -y python-is-python3; \
+    curl -kL https://bootstrap.pypa.io/get-pip.py | python && \
+    pip install --upgrade pip && \
+    pip install --upgrade --ignore-installed --no-cache-dir pyassimp pylint==1.9.4 notebook~=5.7 Pygments matplotlib ipywidgets jupyter_contrib_nbextensions nbimporter supervisor supervisor_twiddler argcomplete
 
 # add non-root user
-RUN useradd -m developer && \
-    echo developer ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/developer && \
-    chmod 0440 /etc/sudoers.d/developer
+RUN useradd -m ${USER} && \
+    echo ${USER} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USER} && \
+    chmod 0440 /etc/sudoers.d/${USER}
 
 # install depending packages (install moveit! algorithms on the workspace side, since moveit-commander loads it from the workspace)
 RUN apt-get update && apt-get upgrade -y && \
@@ -85,20 +84,18 @@ RUN apt-get update && apt-get upgrade -y && \
     apt-get clean
 
 # install bio_ik
-RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
-    mkdir -p /bio_ik_ws/src && \
-    cd /bio_ik_ws/src && \
-    catkin_init_workspace && \
-    git clone --depth=1 https://github.com/TAMS-Group/bio_ik.git && \
-    cd .. && \
-    catkin_make install -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/ros/$ROS_DISTRO -DCATKIN_ENABLE_TESTING=0 && \
-    cd / && rm -r /bio_ik_ws
+# RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
+#     mkdir -p /bio_ik_ws/src && \
+#     cd /bio_ik_ws/src && \
+#     catkin_init_workspace && \
+#     git clone --depth=1 https://github.com/TAMS-Group/bio_ik.git && \
+#     cd .. && \
+#     catkin_make install -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/ros/$ROS_DISTRO -DCATKIN_ENABLE_TESTING=0 && \
+#     cd / && rm -r /bio_ik_ws
 
 # configure services
 RUN mkdir -p /etc/supervisor/conf.d
 COPY .devcontainer/supervisord.conf /etc/supervisor/supervisord.conf
-COPY .devcontainer/theia.conf /etc/supervisor/conf.d/theia.conf
-COPY .devcontainer/jupyter.conf /etc/supervisor/conf.d/jupyter.conf
 
 COPY .devcontainer/entrypoint.sh /entrypoint.sh
 
@@ -106,10 +103,10 @@ COPY .devcontainer/sim.py /usr/bin/sim
 
 COPY --from=xsdcache /opt/xsd /opt/xsd
 
-USER developer
-WORKDIR /home/developer
+USER ${USER}
+WORKDIR /home/${USER}
 
-ENV HOME /home/developer
+ENV HOME /home/${USER}
 ENV SHELL /bin/bash
 
 # jre is required to use XML editor extension
@@ -138,27 +135,19 @@ RUN git clone --depth 1 https://github.com/b4b4r07/enhancd.git ~/.enhancd && \
 RUN rosdep update
 
 # global vscode config
-ADD .vscode /home/developer/.vscode
-ADD .vscode /home/developer/.theia
-ADD .devcontainer/compile_flags.txt /home/developer/compile_flags.txt
-ADD .devcontainer/templates /home/developer/templates
-RUN sudo chown -R developer:developer /home/developer
+ADD .vscode /home/${USER}/.vscode
+# ADD .vscode /home/${USER}/.theia
+ADD .devcontainer/compile_flags.txt /home/${USER}/compile_flags.txt
+ADD .devcontainer/templates /home/${USER}/templates
+RUN sudo chown -R ${USER}:${USER} /home/${USER}
 
 # install theia web IDE
-COPY .devcontainer/theia-latest.package.json /home/developer/package.json
-RUN yarn --cache-folder ./ycache && rm -rf ./ycache && \
-    NODE_OPTIONS="--max_old_space_size=4096" yarn theia build && \
-    yarn theia download:plugins
+# COPY .devcontainer/theia-latest.package.json /home/${USER}/package.json
+# RUN yarn --cache-folder ./ycache && rm -rf ./ycache && \
+#     NODE_OPTIONS="--max_old_space_size=4096" yarn theia build && \
+#     yarn theia download:plugins
 
-ENV THEIA_DEFAULT_PLUGINS local-dir:/home/developer/plugins
-
-# enable jupyter extensions
-RUN jupyter nbextension enable hinterland/hinterland && \
-    jupyter nbextension enable toc2/main && \
-    jupyter nbextension enable code_prettify/autopep8 && \
-    jupyter nbextension enable nbTranslate/main && \
-    mkdir -p /home/developer/.ipython/profile_default && \
-    echo "c.Completer.use_jedi = False" >> /home/developer/.ipython/profile_default/ipython_kernel_config.py
+# ENV THEIA_DEFAULT_PLUGINS local-dir:/home/${USER}/plugins
 
 # enter ROS world
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
