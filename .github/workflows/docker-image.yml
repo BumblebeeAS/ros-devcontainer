@@ -29,24 +29,31 @@ jobs:
           - dockerfile: ./simulator-index/Dockerfile
             image: ghcr.io/ngxingyu/simulator-index
             tag: ghcr.io/ngxingyu/simulator-index:latest
+            context: ./simulator-index/
           - dockerfile: ./ros-index/Dockerfile
             image: ghcr.io/ngxingyu/ros-index
             tag: ghcr.io/ngxingyu/ros-index:latest
+            context: ./ros-index/
           - dockerfile: ./Dockerfile.melodic
             image: ghcr.io/ngxingyu/ros-devcontainer
             tag: ghcr.io/ngxingyu/ros-devcontainer:melodic-desktop
+            context: ./
           - dockerfile: ./Dockerfile.noetic
             image: ghcr.io/ngxingyu/ros-devcontainer
             tag: ghcr.io/ngxingyu/ros-devcontainer:noetic-desktop
+            context: ./
           - dockerfile: ./Dockerfile.humble
             image: ghcr.io/ngxingyu/ros-devcontainer
             tag: ghcr.io/ngxingyu/ros-devcontainer:humble-desktop
+            context: ./
           - dockerfile: ./simulators/simulator-vrx/Dockerfile
             image: ghcr.io/ngxingyu/simulator_vrx
             tag: ghcr.io/ngxingyu/simulator_vrx:latest
+            context: ./simulators/simulator-vrx
           - dockerfile: ./simulators/simulator-uuv/Dockerfile
             image: ghcr.io/ngxingyu/simulator_uuv
             tag: ghcr.io/ngxingyu/simulator_uuv:latest
+            context: ./simulators/simulator-uuv
 
     permissions:
       contents: read
@@ -97,7 +104,7 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
         with:
-          context: .
+          context: ${{ matrix.context }}
           file: ${{ matrix.dockerfile }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ matrix.tag }}
