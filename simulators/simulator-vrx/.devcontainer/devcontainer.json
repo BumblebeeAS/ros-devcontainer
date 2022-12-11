@@ -1,0 +1,13 @@
+{
+    "name": "Noetic Dev",
+    
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:1": {},
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/devcontainers/features/nvidia-cuda:1": "1.0.5"
+    },
+    "extensions": [
+		"ms-vscode.cpptools",
+		"ms-python.python"
+    ]
+}
