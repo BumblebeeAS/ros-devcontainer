@@ -6,9 +6,9 @@ RUN apk add --no-cache openssh-client git
 RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 
 # clone any private repository
-RUN --mount=type=ssh git clone git@github.com:ngxingyu/bbauv_descriptions.git bbauv_descriptions
-RUN --mount=type=ssh git clone git@github.com:ngxingyu/simulator.git -b gazebo_11
-RUN --mount=type=ssh git clone git@github.com:ngxingyu/bb_msgs.git bb_msgs -b dev
+RUN --mount=type=ssh git clone git@github.com:ngxingyu/bbauv_descriptions.git && cd bbauv_descriptions && git checkout a9827c0cccad5b32d0590698dca6bbfa53c77df9
+RUN --mount=type=ssh git clone git@github.com:ngxingyu/simulator.git && cd simulator && git checkout 29440b96285a0de0c89ff8eba397db211962441e
+RUN --mount=type=ssh git clone git@github.com:ngxingyu/bb_msgs.git bb_msgs && cd bb_msgs && git checkout eec38db210459cc9bfd8725cbe2729005a80947a
 # RUN --mount=type=ssh git clone git@github.com:ngxingyu/bb_msgs.git bb_msgs -b add_asv_msgs
 
 FROM ghcr.io/ngxingyu/dockwater:noetic
@@ -49,7 +49,7 @@ RUN cd /root/catkin_ws/src && source /opt/ros/noetic/setup.bash && \
     vcs import < snapshot.repos && \
     cd /root/catkin_ws && \
     rosdep install --from-paths src --ignore-src -r -y --rosdistro noetic && \
-    catkin config -a --blacklist bbasv_gazebo_plugins bbasv_gazebo_worlds asv_urdf vrx_urdf && \
+    catkin config -a --blacklist bbasv_gazebo_plugins bbasv_gazebo_worlds bbuav_gazebo_plugins asv_urdf vrx_urdf && \
     catkin build
 
 # RUN apt-get update && apt-get install -y mesa-utils bash libxtst6:amd64 libgl1-mesa-glx:amd64 libegl1-mesa && curl -L https://sourceforge.net/projects/virtualgl/files/3.0.2/virtualgl_3.0.2_amd64.deb/download --output virtualgl_3.0.2_amd64.deb && \ 
