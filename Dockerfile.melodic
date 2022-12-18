@@ -46,7 +46,7 @@ RUN apt update && sudo apt install locales \
   && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 \
   && apt-get clean -qq
 
-RUN apt-get update || true && \
+RUN apt-get update && \
     apt-get install -y curl apt-transport-https ca-certificates && \
     apt-get clean
 
