@@ -5,7 +5,7 @@ Packed with:
 - Browser accessible X11 server to display gazebo, rviz, rqt (runs on Windows/Mac).
 - Tasks definition to run catkin_make, roscore, rviz commands.
 - Preconfigured code completion for C++, Python, XML (package.xml, launchfiles, URDF, SDF).
-- Preconfigured simulation environments (Flatland, TurtleBot3, ARIAC, Virtual RobotX, UUV).
+- Preconfigured simulation environments (Virtual RobotX, UUV).
 <!-- - Bonus: WebIDE (Theia) with preconfigured C++, Python, XML completion. -->
 
 ## Adding a new sim:
@@ -20,11 +20,22 @@ Packed with:
     - `simulator-index`: tool to select simulator from `index.yaml` and modify the `docker-compose.yml` launch file.
     - `ros-index`: tool to select the desired ros version from `index.yaml` and modify the `docker-compose.yml` launch file
     - `noetic_dev` or `melodic_dev` etc: contains the ros environment for the development container. Contains useful tools and should contain all packages that we might require.
-    - `uuv_simulator`
-  - Alternatively, just build or pull all images in the termminal or with some script.
-  - Specify the workspace you want to bind to the workspace container by changing the volume under workspace in `docker-compose`. Also configure any settings you want within `docker-compose`
-  - Run `docker-compose up` to launch the `xserver`, `simulation` container and the ros workspace container. Ensure the `DISPLAY` env variable is set correctly. You should be able to see any guis by visiting `localhost:3000`.
-  - In a new shell, run `./join.bash <container_name>` e.g. `./join.bash ros-devcontainer-workspace-1` to start a shell in the container.
+    - `uuv_simulator` simulation image
+    - `vrx` simulation image
+  - You will need to start the ssh-agent and add your ssh-key to allow docker to clone the required private repos.
+
+<code>eval $(ssh-agent -s)
+
+ssh-add ~/.ssh/YOUR_PRIVATE_KEY # add key which can access all above repositories
+
+build.sh # either
+
+sudo docker buildx bake -f docker-bake.hcl build --set "simulator-uuv.ssh=default=$SSH_AUTH_SOCK" --set "simulator-vrx.ssh=default=$SSH_AUTH_SOCK" # or
+</code>
+  - Specify the workspace you want to bind to the workspace container by changing the docker volume under workspace in `docker-compose`. Also configure any settings you want within `docker-compose.yml`
+  - Select the simulation environment and the ros version using `select-ros.sh` and `select-simulator.sh`
+  - Run `docker-compose up` to launch the `xserver`, `simulation` container and the ros workspace container. Ensure your `DISPLAY` env variable is set correctly. You should be able to view the guis by visiting `localhost:3000`.
+  - In a new shell, run `./join.bash <container_name>` e.g. `./join.bash ros-devcontainer-workspace-1` to start a shell in the container. Alternatively, use vscode to attach the container that you want to work on.
 
 
 VSCode and devcontainer running on Mac:
@@ -42,7 +53,7 @@ Enter following command to select the simulator:
 $ ./select-simulator.sh
 ```
 
-Preconfigured simulation environment currently includes: Flatland, TurtleBot3, ARIAC, Virtual RobotX, UUV.
+Preconfigured simulation environment currently includes: Virtual RobotX, UUV.
 
 <!-- See the following index for list of current simulators:
 

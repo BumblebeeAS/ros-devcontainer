@@ -43,8 +43,10 @@ services:
       - "3001:3000"
       - "3002:8888"
     volumes:
-      - workspace:/workspace # persist the devel / install folder across sessions
-      - ../bbauv_ws/src:/workspace/src # bind-mount your own workspace in the workspace container
+      - auv_workspace:/workspace # persist the devel / install folder across sessions
+      - ../bbauv_ws/src:/workspace/src # bind-mount auv workspace
+      # - asv_workspace:/workspace # persist the devel / install folder across sessions
+      # - ../bbasv_ws/src:/workspace/src # bind-mount asv workspace
     environment:
       - DISPLAY=:0
       - ROS_MASTER_URI=http://simulator:11311/
@@ -61,4 +63,5 @@ services:
               count: 1
               capabilities: [gpu]
 volumes:
-  workspace: # volume
+  asv_workspace: # volume
+  auv_workspace: # volume

@@ -1,6 +1,0 @@
-#!/bin/bash
-
-if [ "$DOCKER_TAG" == "melodic-desktop" ]; then
-    docker tag $IMAGE_NAME $DOCKER_REPO:latest
-    docker push $DOCKER_REPO:latest
-fi
