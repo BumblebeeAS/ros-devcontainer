@@ -7,6 +7,8 @@ services:
       - seccomp:unconfined
     ports:
       - "3000:80"
+    volumes:
+      - /dev/dri:/dev/dri
     healthcheck:
       test: ["CMD-SHELL", "test -e /tmp/.X11-unix/X1"]
       interval: "1s"
@@ -18,11 +20,8 @@ services:
       - seccomp:unconfined
     environment:
       - DISPLAY=:0
-      - QT_X11_NO_MITSHM=1
     volumes_from:
       - xserver
-    volumes:
-      - /dev/dri # for intel gpu
     depends_on:
       - xserver
     deploy:

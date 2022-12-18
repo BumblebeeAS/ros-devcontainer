@@ -1,20 +1,8 @@
 repositories:
-  bb_msgs:
-    type: git
-    url: https://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@github.com/BumblebeeAS/bb_msgs.git
-    version: master  
-  bbauv_descriptions:
-    type: git
-    url: https://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@github.com/ngxingyu/bbauv_descriptions.git
-    version: master
   rexrov2:
     type: git
     url: https://github.com/uuvsimulator/rexrov2.git
     version: master
-  simulator:
-    type: git
-    url: https://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@github.com/ngxingyu/simulator.git
-    version: 3ba31c32af1f663dcad33d44fc0c0eb7eb905fc6
   uuv_simulation_evaluation:
     type: git
     url: https://github.com/uuvsimulator/uuv_simulation_evaluation.git

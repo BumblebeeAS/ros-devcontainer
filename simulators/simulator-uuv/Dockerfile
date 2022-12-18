@@ -1,3 +1,16 @@
+# syntax=docker/dockerfile:experimental
+FROM alpine AS ssh_auth
+# install ssh client and git
+RUN apk add --no-cache openssh-client git
+# download public key for github.com
+RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+# clone any private repository
+RUN --mount=type=ssh git clone git@github.com:ngxingyu/bbauv_descriptions.git bbauv_descriptions
+RUN --mount=type=ssh git clone git@github.com:ngxingyu/simulator.git -b gazebo_11
+RUN --mount=type=ssh git clone git@github.com:ngxingyu/bb_msgs.git bb_msgs -b dev
+# RUN --mount=type=ssh git clone git@github.com:ngxingyu/bb_msgs.git bb_msgs -b add_asv_msgs
+
 FROM ghcr.io/ngxingyu/dockwater:noetic
 
 SHELL ["/bin/bash", "-c"]
@@ -5,7 +18,7 @@ SHELL ["/bin/bash", "-c"]
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && \
-    apt-get install -y curl python3-pip python3-rosdep python3-catkin-pkg python3-catkin-tools python3-vcstool git
+    apt-get install -y curl python3-pip python3-rosdep python3-catkin-pkg python3-catkin-tools python3-vcstool git && apt clean
 
 RUN pip3 install -U --no-cache-dir supervisor supervisor_twiddler
 
@@ -26,7 +39,10 @@ RUN apt-get update && apt-get install -y ros-noetic-rviz && \
 # RUN git clone --depth 1 https://github.com/osrf/uctf.git /tmp/uctf && \
 #     cp -r /tmp/uctf/models/iris_with_standoffs_demo /usr/share/gazebo-11/models/ && \
 #     rm -r /tmp/uctf
-# github_pat_11ADAYHMA056NRkI71S6Ge_C3SnWmtrPHUsbRdNK9lqYwnbzWgCl3dp6sxkNS1Jcc7KYJZ7OAZ4WeBGK
+
+COPY --from=ssh_auth /bbauv_descriptions /root/catkin_ws/src/bbauv_descriptions
+COPY --from=ssh_auth /simulator /root/catkin_ws/src/simulator
+COPY --from=ssh_auth /bb_msgs /root/catkin_ws/src/bb_msgs
 
 # Currently imports entire simulator repo, to try separating auv and asv code into separate repos.
 RUN cd /root/catkin_ws/src && source /opt/ros/noetic/setup.bash && \
@@ -35,6 +51,10 @@ RUN cd /root/catkin_ws/src && source /opt/ros/noetic/setup.bash && \
     rosdep install --from-paths src --ignore-src -r -y --rosdistro noetic && \
     catkin config -a --blacklist bbasv_gazebo_plugins bbasv_gazebo_worlds asv_urdf vrx_urdf && \
     catkin build
+
+# RUN apt-get update && apt-get install -y mesa-utils bash libxtst6:amd64 libgl1-mesa-glx:amd64 libegl1-mesa && curl -L https://sourceforge.net/projects/virtualgl/files/3.0.2/virtualgl_3.0.2_amd64.deb/download --output virtualgl_3.0.2_amd64.deb && \ 
+#     dpkg -i virtualgl_3.0.2_amd64.deb && apt --fix-broken install && dpkg -i virtualgl_3.0.2_amd64.deb
+# RUN printf "1\nn\nn\nn\nx\n" | /opt/VirtualGL/bin/vglserver_config
 
 ADD ros_entrypoint.sh /ros_entrypoint.sh
 RUN chmod 755 /ros_entrypoint.sh
