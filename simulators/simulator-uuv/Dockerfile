@@ -7,9 +7,8 @@ RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 
 # clone any private repository
 RUN --mount=type=ssh git clone git@github.com:ngxingyu/bbauv_descriptions.git && cd bbauv_descriptions && git checkout a9827c0cccad5b32d0590698dca6bbfa53c77df9
-RUN --mount=type=ssh git clone git@github.com:ngxingyu/simulator.git && cd simulator && git checkout 29440b96285a0de0c89ff8eba397db211962441e
-RUN --mount=type=ssh git clone git@github.com:ngxingyu/bb_msgs.git bb_msgs && cd bb_msgs && git checkout eec38db210459cc9bfd8725cbe2729005a80947a
-# RUN --mount=type=ssh git clone git@github.com:ngxingyu/bb_msgs.git bb_msgs -b add_asv_msgs
+RUN --mount=type=ssh git clone git@github.com:BumblebeeAS/simulator.git && cd simulator && git checkout fc1cf1d5653933b70fc280bcf4ef700d63d47665
+RUN --mount=type=ssh git clone git@github.com:BumblebeeAS/bb_msgs.git && cd bb_msgs && git checkout 869a975ec102de2055818e612758c4bd3c141d49
 
 FROM ghcr.io/ngxingyu/dockwater:noetic
 
