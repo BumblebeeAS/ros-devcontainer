@@ -1,4 +1,5 @@
-ARG BASE_IMAGE=ghcr.io/ngxingyu/dockwater:melodic
+# ARG BASE_IMAGE=ghcr.io/ngxingyu/dockwater:noetic
+ARG BASE_IMAGE=ros-devcontainer:noetic-base
 
 FROM maven:3.8.6-openjdk-18 AS xsdcache
 
@@ -41,6 +42,7 @@ RUN rm /etc/apt/apt.conf.d/docker-clean
 RUN sed -i -e 's/http:\/\/archive/mirror:\/\/mirrors/' -e 's/http:\/\/security/mirror:\/\/mirrors/' -e 's/\/ubuntu\//\/mirrors.txt/' /etc/apt/sources.list
 
 # Setup locale
+ENV LC_ALL=C
 RUN apt update && sudo apt install locales \
   && locale-gen en_US en_US.UTF-8 \
   && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 \
@@ -63,12 +65,13 @@ RUN sh -c 'echo "deb https://deb.nodesource.com/node_14.x `lsb_release -cs` main
 
 # install depending packages
 RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y bash-completion less wget vim-tiny iputils-ping net-tools openssh-client git openjdk-8-jdk-headless nodejs sudo imagemagick byzanz python-dev libsecret-1-dev && \
+    apt-get install -y bash-completion less wget vim-tiny iputils-ping net-tools openssh-client git openjdk-8-jdk-headless nodejs sudo imagemagick byzanz python3-dev libsecret-1-dev && \
     npm install -g yarn && \
     apt-get clean
 
 # basic python packages
-RUN curl -kL https://bootstrap.pypa.io/pip/2.7/get-pip.py | python && \
+RUN apt-get install -y python-is-python3; \
+    curl -kL https://bootstrap.pypa.io/get-pip.py | python && \
     pip install --upgrade pip && \
     pip install --upgrade --ignore-installed --no-cache-dir pyassimp pylint==1.9.4 notebook~=5.7 Pygments matplotlib ipywidgets jupyter_contrib_nbextensions nbimporter supervisor supervisor_twiddler argcomplete
 
@@ -78,9 +81,16 @@ RUN useradd -m ${USER} && \
     chmod 0440 /etc/sudoers.d/${USER}
 
 # install depending packages (install moveit! algorithms on the workspace side, since moveit-commander loads it from the workspace)
-RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y ros-$ROS_DISTRO-desktop ros-$ROS_DISTRO-moveit ros-$ROS_DISTRO-moveit-commander ros-$ROS_DISTRO-moveit-ros-visualization ros-$ROS_DISTRO-trac-ik ros-$ROS_DISTRO-move-base-msgs ros-$ROS_DISTRO-ros-numpy && \
-    apt-get clean
+# RUN apt-get update && apt-get upgrade -y && \
+#     apt-get install -y \
+    # ros-$ROS_DISTRO-desktop \
+    # ros-$ROS_DISTRO-moveit \
+    # ros-$ROS_DISTRO-moveit-commander
+    # ros-$ROS_DISTRO-moveit-ros-visualization
+    # ros-$ROS_DISTRO-trac-ik
+    # ros-$ROS_DISTRO-move-base-msgs
+    # ros-$ROS_DISTRO-ros-numpy && \
+    # apt-get clean
 
 # install bio_ik
 # RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
@@ -135,6 +145,7 @@ RUN rosdep update
 
 # global vscode config
 ADD .vscode /home/${USER}/.vscode
+# ADD .vscode /home/${USER}/.theia
 ADD .devcontainer/compile_flags.txt /home/${USER}/compile_flags.txt
 ADD .devcontainer/templates /home/${USER}/templates
 RUN sudo chown -R ${USER}:${USER} /home/${USER}
