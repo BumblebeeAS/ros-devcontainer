@@ -4,29 +4,45 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "catkin_make",
+            "label": "_catkin_build",
             "type": "shell",
-            "command": "bash -i -c catkin_make",
+            "command": "catkin",
+            "args": [
+                "build",
+                "-j4",
+                "-DCMAKE_BUILD_TYPE=Debug",
+                "-DCMAKE_EXPORT_COMPILE_COMMANDS=1",
+                "-DCMAKE_CXX_STANDARD=14",
+                "simulation_utils",
+                "image_matching"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build"
+            }
+        },
+        {
+            "command": "${workspaceFolder}/.vscode/merge_compile_commands.sh",
+            "type": "shell",
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "problemMatcher": {
-                "fileLocation": "absolute",
-                "pattern": {
-                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                    "file": 1,
-                    "line": 2,
-                    "column": 3,
-                    "severity": 4,
-                    "message": 5
-                }
-            }
+            "label": "catkin: build",
+            "problemMatcher": [],
+            "dependsOn": [
+                "_catkin_build"
+            ]
         },
         {
             "label": "catkin_create_pkg",
             "type": "shell",
             "command": "bash -i -c 'cd src && catkin_create_pkg ${input:packageName} ${input:dependingPackages}'"
+        },
+        {
+            "label": "store_ros_env",
+            "type": "shell",
+            "command": "source /opt/ros/noetic/setup.bash; source /home/developer/workspace/devel/setup.bash; printenv | grep noetic > ${workspaceFolder}/.env"
         },
         {
             "label": "xserver",
