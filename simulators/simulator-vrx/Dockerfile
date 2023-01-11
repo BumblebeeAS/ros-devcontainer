@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-FROM ghcr.io/ngxingyu/dockwater:noetic as noetic
+FROM ngxingyu/ros-devcontainer:noetic-base as noetic
 
 SHELL ["/bin/bash", "-c"]
 
@@ -15,22 +15,6 @@ RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb
     curl -L http://packages.osrfoundation.org/gazebo.key | apt-key add -
 
 
-# RUN source /opt/ros/noetic/setup.bash && \
-#     mkdir -p ~/catkin_ws/src && cd ~/catkin_ws/src && \
-#     catkin_init_workspace && \
-#     git clone --depth 1 https://github.com/avidbots/flatland.git && \
-#     git clone --depth 1 https://github.com/avidbots/turtlebot_flatland.git && \
-#     git clone --depth 1 -b melodic https://github.com/turtlebot/turtlebot.git && \
-#     git clone --depth 1 https://github.com/turtlebot/turtlebot_apps.git && \
-#     rm -r turtlebot_apps/turtlebot_actions && \
-#     rm -r turtlebot_apps/turtlebot_follower && \
-#     cd .. && \
-#     rosdep update && apt-get update && \
-#     apt-get install -y supervisor && \
-#     rosdep install --from-paths src --ignore-src -r -y && \
-#     catkin_make -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/ros/noetic install && \
-#     cp -r src/turtlebot_flatland /opt/ros/noetic/share/ && \
-#     apt-get clean && rm -r ~/catkin_ws
 
 FROM alpine AS ssh_auth
 # install ssh client and git
@@ -47,11 +31,6 @@ FROM noetic AS noetic2
 COPY --from=ssh_auth /bbasv_descriptions /root/catkin_ws/src/bbasv_descriptions
 COPY --from=ssh_auth /simulator /root/catkin_ws/src/simulator
 COPY --from=ssh_auth /bb_msgs /root/catkin_ws/src/bb_msgs
-
-RUN apt-get update && apt-get install -y libgoogle-glog-dev ros-noetic-octomap-ros && \
-    source /opt/ros/noetic/setup.bash && mkdir -p ~/vrx_ws/src && cd ~/vrx_ws/src &&  git clone https://github.com/ethz-asl/mav_comm.git && \
-    git clone https://github.com/ethz-asl/rotors_simulator.git && \
-    cd ~/vrx_ws && catkin build rotors_simulator
 
 RUN source /opt/ros/noetic/setup.bash && \
     mkdir -p ~/vrx_ws/src && cd ~/vrx_ws/src && git clone --depth 1 https://github.com/ngxingyu/vrx.git -b robotx22 && \

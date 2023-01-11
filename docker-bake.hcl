@@ -1,5 +1,5 @@
 group "build" {
-  targets = ["simulator-index", "ros-index", "humble_dev", "melodic_dev", "noetic_dev", "simulator-vrx", "simulator-uuv"]
+  targets = ["ros-index", "select-index", "noetic_dev", "simulator-vrx", "simulator-uuv"]
 }
 
 target "docker-xserver" {
@@ -7,39 +7,39 @@ target "docker-xserver" {
   dockerfile = "Dockerfile"
   tags = ["ngxingyu/xserver:latest"]
 }
-target "simulator-index" {
-  context = "./simulator-index"
-  dockerfile = "Dockerfile"
-  tags = ["ngxingyu/simulator-index:latest"]
-}
 target "ros-index" {
   context = "./ros-index"
   dockerfile = "Dockerfile"
-  tags = ["ngxingyu/ros-index:latest"]
+  tags = ["ngxingyu/ros-index:latest", "ros-index:latest"]
+}
+target "select-index" {
+  context = "./select-index"
+  dockerfile = "Dockerfile"
+  tags = ["select-index:latest", "select-index:latest"]
 }
 
 target "melodic_dev" {
-  context = "./"
-  dockerfile = "Dockerfile.melodic"
-  tags = ["ngxingyu/ros-devcontainer:melodic-desktop"]
+  context = "./devcontainers/melodic"
+  dockerfile = "Dockerfile.base"
+  tags = ["ngxingyu/ros-devcontainer:melodic-base", "ros-devcontainer:melodic-dev"]
 }
 target "noetic_dev" {
-  context = "./"
-  dockerfile = "Dockerfile.noetic"
-  tags = ["ngxingyu/ros-devcontainer:noetic-desktop"]
+  context = "./devcontainers/noetic"
+  dockerfile = "Dockerfile.base"
+  tags = ["ngxingyu/ros-devcontainer:noetic-base", "ros-devcontainer:noetic-dev"]
 }
 target "humble_dev" {
-  context = "./"
-  dockerfile = "Dockerfile.humble"
-  tags = ["ngxingyu/ros-devcontainer:humble-desktop"]
+  context = "./devcontainers/humble"
+  dockerfile = "Dockerfile.base"
+  tags = ["ngxingyu/ros-devcontainer:humble-base", "ros-devcontainer:humble-dev"]
 }
 target "simulator-vrx" {
   context = "./simulators/simulator-vrx"
   dockerfile = "Dockerfile"
-  tags = ["ngxingyu/simulator_vrx:latest"]
+  tags = ["ngxingyu/simulator_vrx:latest", "simulator_vrx:latest"]
 }
 target "simulator-uuv" {
   context = "./simulators/simulator-uuv"
   dockerfile = "Dockerfile"
-  tags = ["ngxingyu/simulator_uuv:latest"]
+  tags = ["ngxingyu/simulator_uuv:latest", "simulator_uuv:latest"]
 }
