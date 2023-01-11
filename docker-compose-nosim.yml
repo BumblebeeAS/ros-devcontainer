@@ -14,7 +14,7 @@ services:
       interval: "1s"
       retries: 20
   simulator:
-    image: "simulator_uuv"
+    image: "ngxingyu/simulator_vrx"
     ipc: host
     security_opt:
       - seccomp:unconfined
@@ -24,18 +24,18 @@ services:
       - xserver
     depends_on:
       - xserver
-      # deploy:
-      #   resources:
-      #     reservations:
-      #       devices:
-      #         - driver: nvidia
-      #           count: 1
-      #           capabilities: [gpu]
-      # runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    runtime: nvidia
   workspace:
     # env_file:
     #   - .env
-    image: ros-devcontainer:noetic-dev
+    image: ngxingyu/ros-devcontainer:noetic-desktop
     ipc: host
     security_opt:
       - seccomp:unconfined
@@ -55,13 +55,13 @@ services:
       - simulator
     depends_on:
       - xserver
-      # deploy:
-      #   resources:
-      #     reservations:
-      #       devices:
-      #         - driver: nvidia
-      #           count: 1
-      #           capabilities: [gpu]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
 volumes:
   asv_workspace: # volume
   auv_workspace: # volume

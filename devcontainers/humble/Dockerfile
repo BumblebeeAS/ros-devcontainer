@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=ghcr.io/ngxingyu/dockwater:noetic
+ARG BASE_IMAGE=ghcr.io/ngxingyu/dockwater:humble
 
 FROM maven:3.8.6-openjdk-18 AS xsdcache
 
@@ -10,7 +10,7 @@ RUN microdnf install git && \
 
 # fetch XSD file for package.xml
 RUN mkdir -p /opt/xsd/package.xml && \
-    java -jar schema-fetcher/target/schema-fetcher-1.0.0-SNAPSHOT.jar /opt/xsd/package.xml http://download.ros.org/schema/package_format2.xsd
+    java -jar schema-fetcher/target/schema-fetcher-1.0.0-SNAPSHOT.jar /opt/xsd/package.xml http://download.ros.org/schema/package_format3.xsd
 
 # fetch XSD file for roslaunch
 RUN mkdir -p /opt/xsd/roslaunch && \
@@ -41,24 +41,24 @@ RUN rm /etc/apt/apt.conf.d/docker-clean
 RUN sed -i -e 's/http:\/\/archive/mirror:\/\/mirrors/' -e 's/http:\/\/security/mirror:\/\/mirrors/' -e 's/\/ubuntu\//\/mirrors.txt/' /etc/apt/sources.list
 
 # Setup locale
+ENV LC_ALL=C
 RUN apt update && sudo apt install locales \
   && locale-gen en_US en_US.UTF-8 \
   && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 \
   && apt-get clean -qq
 
 RUN apt-get update && \
-    apt-get install -y curl apt-transport-https ca-certificates && \
+    apt-get install -y curl apt-transport-https ca-certificates software-properties-common && add-apt-repository universe && \
     apt-get clean
 
 # need to renew the key for some reason
-RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
+# RUN  curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
 
 # OSRF distribution is better for gazebo
-RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list' && \
-    curl -L http://packages.osrfoundation.org/gazebo.key | apt-key add -
+# RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
 
 # nice to have nodejs for web goodies
-RUN sh -c 'echo "deb https://deb.nodesource.com/node_14.x `lsb_release -cs` main" > /etc/apt/sources.list.d/nodesource.list' && \
+RUN sh -c 'echo "deb https://deb.nodesource.com/node_16.x `lsb_release -cs` main" > /etc/apt/sources.list.d/nodesource.list' && \
     curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
 
 # install depending packages
@@ -79,8 +79,21 @@ RUN useradd -m ${USER} && \
     chmod 0440 /etc/sudoers.d/${USER}
 
 # install depending packages (install moveit! algorithms on the workspace side, since moveit-commander loads it from the workspace)
-RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y ros-$ROS_DISTRO-desktop ros-$ROS_DISTRO-moveit ros-$ROS_DISTRO-moveit-commander ros-$ROS_DISTRO-moveit-ros-visualization ros-$ROS_DISTRO-trac-ik ros-$ROS_DISTRO-move-base-msgs ros-$ROS_DISTRO-ros-numpy && \
+RUN apt-get update && apt-get install -y nano \
+    python3-pydantic \
+    ros-$ROS_DISTRO-joint-state-publisher \
+    ros-$ROS_DISTRO-robot-localization \
+    ros-$ROS_DISTRO-plotjuggler-ros \
+    ros-$ROS_DISTRO-ros2bag \
+    ros-$ROS_DISTRO-rosbag2-storage-default-plugins \
+    ros-$ROS_DISTRO-rqt-tf-tree \
+    ros-$ROS_DISTRO-rmw-fastrtps-cpp \
+    ros-$ROS_DISTRO-rmw-cyclonedds-cpp \
+    ros-$ROS_DISTRO-slam-toolbox \
+    ros-$ROS_DISTRO-turtlebot3 \
+    ros-$ROS_DISTRO-turtlebot3-msgs \
+    ros-$ROS_DISTRO-twist-mux \
+    ros-$ROS_DISTRO-usb-cam && \
     apt-get clean
 
 # install bio_ik
@@ -103,7 +116,7 @@ COPY .devcontainer/sim.py /usr/bin/sim
 
 COPY --from=xsdcache /opt/xsd /opt/xsd
 
-USER ${USER}
+USER $USER
 WORKDIR /home/${USER}
 
 ENV HOME /home/${USER}

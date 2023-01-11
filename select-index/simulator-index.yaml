@@ -1,4 +1,18 @@
 simulators:
+  - image: simulator_vrx
+    description: >
+     Simulator for asv
+    level: advanced
+    distribution: noetic
+    original_url: https://github.com/uuvsimulator/uuv_simulator
+    license: Apache 2.0
+  - image: simulator_uuv
+    description: >
+     Simulator for asv
+    level: advanced
+    distribution: noetic
+    original_url: https://github.com/uuvsimulator/uuv_simulator
+    license: Apache 2.0
   - image: devrt/simulator-empty
     description: >
       Empty simulator image. Only roscore process will be launched.
@@ -27,45 +41,10 @@ simulators:
     distribution: melodic
     original_url: https://github.com/avidbots/turtlebot_flatland
     license: BSD
-  - image: devrt/simulator-panda-arm
-    description: >
-      Panda arm simulator which you can learn how to use MoveIt! through moveit_tutorials.
-    level: intermediate
-    distribution: melodic
-    original_url: http://docs.ros.org/melodic/api/moveit_tutorials/html/index.html
-    license: BSD + Apache 2.0
   - image: devrt/simulator-turtlebot3
     description: >
       TurtleBot3 AutoRace simulator.
     level: advanced
     distribution: melodic
     original_url: https://github.com/ROBOTIS-GIT/turtlebot3
-    license: Apache 2.0
-  - image: devrt/simulator-ariac
-    description: >
-      Industrial robot simulator.
-    level: advanced
-    distribution: melodic
-    original_url: http://gazebosim.org/ariac
-    license: Apache 2.0
-  - image: ngxingyu/simulator_vrx
-    description: >
-      Maritime robotic simulator.
-    level: advanced
-    distribution: noetic
-    original_url: https://github.com/osrf/vrx
-    license: Apache 2.0
-  - image: ngxingyu/vrx_gazebosim
-    description: >
-      Maritime robotic simulator.
-    level: advanced
-    distribution: melodic
-    original_url: https://github.com/osrf/vrx
-    license: Apache 2.0
-  - image: ngxingyu/simulator_uuv
-    description: >
-      Underwater robotics simulator.
-    level: advanced
-    distribution: melodic
-    original_url: https://github.com/uuvsimulator/uuv_simulator
     license: Apache 2.0

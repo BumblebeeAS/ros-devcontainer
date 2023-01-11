@@ -3,6 +3,10 @@ repositories:
     type: git
     url: https://github.com/uuvsimulator/rexrov2.git
     version: master
+  uuv_simulation_evaluation:
+    type: git
+    url: https://github.com/uuvsimulator/uuv_simulation_evaluation.git
+    version: master
   uuv_simulator:
     type: git
     url: https://github.com/ngxingyu/uuv_simulator.git

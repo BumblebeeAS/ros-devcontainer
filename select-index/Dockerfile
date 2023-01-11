@@ -10,6 +10,8 @@ COPY marker /dev/null
 
 ADD select.sh /select.sh
 
-ADD index.yaml /index.yaml
+ADD ros-index.yaml /ros-index.yaml
+
+ADD simulator-index.yaml /simulator-index.yaml
 
 CMD ["/select.sh"]
