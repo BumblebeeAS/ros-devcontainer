@@ -7,7 +7,7 @@ RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 
 # clone any private repository
 RUN --mount=type=ssh git clone git@github.com:ngxingyu/bbasv_descriptions.git && cd bbasv_descriptions && git checkout c19e50b45b2716f36b0c3002d548b838e41e468e
-RUN --mount=type=ssh git clone git@github.com:BumblebeeAS/simulator.git && cd simulator && git checkout fc1cf1d5653933b70fc280bcf4ef700d63d47665
+RUN --mount=type=ssh git clone git@github.com:BumblebeeAS/simulator.git && cd simulator && git checkout deab89d7575b419c64e5b7f0e17d29c78ce75137
 RUN --mount=type=ssh git clone git@github.com:BumblebeeAS/bb_msgs.git && cd bb_msgs && git checkout 869a975ec102de2055818e612758c4bd3c141d49
 
 FROM ghcr.io/ngxingyu/dockwater:noetic
@@ -58,7 +58,7 @@ RUN source /opt/ros/noetic/setup.bash && \
     catkin build && source ~/vrx_ws/devel/setup.bash && \
     cd ~/catkin_ws && \
     catkin config -a --blacklist bbuav_gazebo_plugins && \
-    catkin build bbasv_gazebo_plugins vrx_urdf asv_urdf bb_sim_bridge
+    catkin build bbasv_gazebo_plugins bbasv_gazebo_worlds vrx_urdf asv_urdf bb_sim_bridge
 
 # RUN apt-get update && apt-get install -y mesa-utils bash libxtst6:amd64 libgl1-mesa-glx:amd64 libegl1-mesa && curl -L https://sourceforge.net/projects/virtualgl/files/3.0.2/virtualgl_3.0.2_amd64.deb/download --output virtualgl_3.0.2_amd64.deb && \ 
 #     dpkg -i virtualgl_3.0.2_amd64.deb && apt --fix-broken install && dpkg -i virtualgl_3.0.2_amd64.deb && rm -rf /var/lib/apt/lists/*
