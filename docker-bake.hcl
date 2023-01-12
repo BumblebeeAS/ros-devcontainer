@@ -19,19 +19,34 @@ target "select-index" {
 }
 
 target "melodic_dev" {
-  context = "./devcontainers/melodic"
-  dockerfile = "Dockerfile.base"
-  tags = ["ngxingyu/ros-devcontainer:melodic-base", "ros-devcontainer:melodic-dev"]
+  context = ""
+  dockerfile = "./devcontainers/melodic/Dockerfile"
+  tags = ["ngxingyu/ros-devcontainer:melodic-dev", "ros-devcontainer:melodic-dev"]
 }
 target "noetic_dev" {
-  context = "./devcontainers/noetic"
-  dockerfile = "Dockerfile.base"
-  tags = ["ngxingyu/ros-devcontainer:noetic-base", "ros-devcontainer:noetic-dev"]
+  context = ""
+  dockerfile = "./devcontainers/noetic/Dockerfile"
+  tags = ["ngxingyu/ros-devcontainer:noetic-dev", "ros-devcontainer:noetic-dev"]
 }
 target "humble_dev" {
-  context = "./devcontainers/humble"
-  dockerfile = "Dockerfile.base"
-  tags = ["ngxingyu/ros-devcontainer:humble-base", "ros-devcontainer:humble-dev"]
+  context = ""
+  dockerfile = "./devcontainers/humble/Dockerfile"
+  tags = ["ngxingyu/ros-devcontainer:humble-dev", "ros-devcontainer:humble-dev"]
+}
+target "melodic_base" {
+  context = ""
+  dockerfile = "./devcontainers/melodic/Dockerfile.base"
+  tags = ["ngxingyu/ros-devcontainer:melodic-base", "ros-devcontainer:melodic-base"]
+}
+target "noetic_base" {
+  context = ""
+  dockerfile = "./devcontainers/noetic/Dockerfile.base"
+  tags = ["ngxingyu/ros-devcontainer:noetic-base", "ros-devcontainer:noetic-base"]
+}
+target "humble_base" {
+  context = ""
+  dockerfile = "./devcontainers/humble/Dockerfile.base"
+  tags = ["ngxingyu/ros-devcontainer:humble-base", "ros-devcontainer:humble-base"]
 }
 target "simulator-vrx" {
   context = "./simulators/simulator-vrx"
