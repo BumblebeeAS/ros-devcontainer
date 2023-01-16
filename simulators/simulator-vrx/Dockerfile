@@ -5,6 +5,10 @@ RUN apk add --no-cache openssh-client git
 # download public key for github.com
 RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 
+RUN --mount=type=ssh git clone git@github.com:ngxingyu/bbasv_descriptions.git && cd bbasv_descriptions && git checkout c19e50b45b2716f36b0c3002d548b838e41e468e
+RUN --mount=type=ssh git clone git@github.com:BumblebeeAS/simulator.git && cd simulator && git checkout deab89d7575b419c64e5b7f0e17d29c78ce75137
+RUN --mount=type=ssh git clone git@github.com:BumblebeeAS/bb_msgs.git && cd bb_msgs && git checkout 869a975ec102de2055818e612758c4bd3c141d49
+
 # FROM ghcr.io/ngxingyu/dockwater:noetic
 FROM ros-devcontainer:noetic-base
 
@@ -30,8 +34,8 @@ ARG RELEASE=focal
 RUN /bin/sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable ${RELEASE} main" > /etc/apt/sources.list.d/gazebo-stable.list' \
  && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys D2486D2DD83DB69272AFE98867170598AF249743 \
  && apt-get update && apt-get install -y \
-    libgoogle-glog-dev \
-    ros-noetic-octomap-ros \
+    # libgoogle-glog-dev \
+    ros-${DIST}-octomap-ros \
     # Gazebo stuff
     ${GAZ} \
     lib${GAZ}-dev \
@@ -43,29 +47,26 @@ RUN /bin/sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable
     # Vehicle specific stuff
     ros-${DIST}-velodyne-gazebo-plugins \
     ros-${DIST}-velodyne-simulator \
-    && source /opt/ros/noetic/setup.bash
+    && source /opt/ros/${DIST}/setup.bash
 
 # Build external dependencies for simulation [vrx and rotors_simulator(uav)]
-RUN mkdir -p ~/vrx_ws/src && cd ~/vrx_ws/src &&  git clone https://github.com/ethz-asl/mav_comm.git && \
-    git clone https://github.com/ethz-asl/rotors_simulator.git
+# RUN mkdir -p ~/vrx_ws/src && cd ~/vrx_ws/src &&  git clone https://github.com/ethz-asl/mav_comm.git && \
+#     git clone https://github.com/ethz-asl/rotors_simulator.git
 
 RUN mkdir -p ~/vrx_ws/src && cd ~/vrx_ws/src && git clone --depth 1 https://github.com/ngxingyu/vrx.git -b robotx22
 
-RUN source /opt/ros/noetic/setup.bash && \
-    cd ~/vrx_ws && catkin build rotors_simulator && \
-    rosdep install -i --from-path src --ignore-src -r -y --rosdistro ${DIST} && \
-    catkin build && source ~/vrx_ws/devel/setup.bash
-
 # Build internal simulation packages
-RUN --mount=type=ssh git clone git@github.com:ngxingyu/bbasv_descriptions.git && cd bbasv_descriptions && git checkout c19e50b45b2716f36b0c3002d548b838e41e468e
-RUN --mount=type=ssh git clone git@github.com:BumblebeeAS/simulator.git && cd simulator && git checkout c0bdae369021a4e03ec590d80782dd9888ddca7e
-RUN --mount=type=ssh git clone git@github.com:BumblebeeAS/bb_msgs.git && cd bb_msgs && git checkout 869a975ec102de2055818e612758c4bd3c141d49
-
 COPY --from=ssh_auth /bbasv_descriptions /root/catkin_ws/src/bbasv_descriptions
 COPY --from=ssh_auth /simulator /root/catkin_ws/src/simulator
 COPY --from=ssh_auth /bb_msgs /root/catkin_ws/src/bb_msgs
 
-RUN cd ~/catkin_ws && \
+RUN source /opt/ros/noetic/setup.bash && \
+    cd ~/vrx_ws && \
+    # catkin build rotors_simulator && \
+    rosdep install -i --from-path src --ignore-src -r -y --rosdistro ${DIST} && \
+    catkin build && source ~/vrx_ws/devel/setup.bash
+
+RUN source /opt/ros/noetic/setup.bash && source ~/vrx_ws/devel/setup.bash && cd ~/catkin_ws && \
     catkin config -a --blacklist bbuav_gazebo_plugins && \
     catkin build bbasv_gazebo_worlds bbasv_gazebo_plugins vrx_urdf asv_urdf bb_sim_bridge && \
     source ~/catkin_ws/devel/setup.bash
@@ -78,7 +79,7 @@ RUN cd ~/catkin_ws && \
 ADD ros_entrypoint.sh /ros_entrypoint.sh
 RUN chmod 755 /ros_entrypoint.sh
 
-RUN sh -c 'echo "source /opt/ros/noetic/setup.bash && source ~/vrx_ws/devel/setup.bash && source ~/catkin_ws/devel/setup.bash" > ~/.bashrc'
+# RUN sh -c 'echo "source /opt/ros/noetic/setup.bash && source ~/vrx_ws/devel/setup.bash && source ~/catkin_ws/devel/setup.bash" > ~/.bashrc'
 
 ADD supervisord.conf /etc/supervisor/supervisord.conf
 

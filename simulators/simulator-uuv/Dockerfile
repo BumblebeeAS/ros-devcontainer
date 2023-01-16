@@ -5,6 +5,12 @@ RUN apk add --no-cache openssh-client git
 # download public key for github.com
 RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 
+# Build internal packages
+RUN --mount=type=ssh git clone git@github.com:ngxingyu/bbauv_descriptions.git && cd bbauv_descriptions && git checkout a9827c0cccad5b32d0590698dca6bbfa53c77df9
+RUN --mount=type=ssh git clone git@github.com:BumblebeeAS/simulator.git && cd simulator && git checkout deab89d7575b419c64e5b7f0e17d29c78ce75137
+RUN --mount=type=ssh git clone git@github.com:BumblebeeAS/bb_msgs.git && cd bb_msgs && git checkout 869a975ec102de2055818e612758c4bd3c141d49
+
+
 FROM ros-devcontainer:noetic-base
 
 SHELL ["/bin/bash", "-c"]
@@ -30,11 +36,6 @@ RUN apt-get update && apt-get install -y ros-noetic-rviz && \
 # RUN git clone --depth 1 https://github.com/osrf/uctf.git /tmp/uctf && \
 #     cp -r /tmp/uctf/models/iris_with_standoffs_demo /usr/share/gazebo-11/models/ && \
 #     rm -r /tmp/uctf
-
-# Build internal packages
-RUN --mount=type=ssh git clone git@github.com:ngxingyu/bbauv_descriptions.git && cd bbauv_descriptions && git checkout a9827c0cccad5b32d0590698dca6bbfa53c77df9
-RUN --mount=type=ssh git clone git@github.com:BumblebeeAS/simulator.git && cd simulator && git checkout deab89d7575b419c64e5b7f0e17d29c78ce75137
-RUN --mount=type=ssh git clone git@github.com:BumblebeeAS/bb_msgs.git && cd bb_msgs && git checkout 869a975ec102de2055818e612758c4bd3c141d49
 
 COPY --from=ssh_auth /bbauv_descriptions /root/catkin_ws/src/bbauv_descriptions
 COPY --from=ssh_auth /simulator /root/catkin_ws/src/simulator
