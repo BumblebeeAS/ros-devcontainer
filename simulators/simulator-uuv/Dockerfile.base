@@ -5,6 +5,11 @@ SHELL ["/bin/bash", "-c"]
 
 ENV DEBIAN_FRONTEND noninteractive
 
+# Set Gazebo version
+ARG GAZ=gazebo11
+ARG DIST=noetic
+ARG RELEASE=focal
+
 RUN apt-get update && \
     apt-get install -y curl python3-pip python3-rosdep python3-catkin-pkg python3-catkin-tools python3-vcstool git && \
     apt clean
