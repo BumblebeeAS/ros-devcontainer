@@ -1,53 +1,4 @@
 # syntax=docker/dockerfile:experimental
-FROM ghcr.io/ngxingyu/ros-devcontainer:noetic-base as noetic
-
-SHELL ["/bin/bash", "-c"]
-
-ENV DEBIAN_FRONTEND noninteractive
-
-RUN apt-get update && \
-    apt-get install -y curl python3-pip python3-rosdep python3-catkin-pkg python3-catkin-tools git && \
-    apt-get clean
-RUN pip3 install -U --no-cache-dir supervisor supervisor_twiddler
-
-# OSRF distribution is better for gazebo
-RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list' && \
-    curl -L http://packages.osrfoundation.org/gazebo.key | apt-key add -
-
-# Set Gazebo version
-ARG GAZ=gazebo11
-ARG DIST=noetic
-ARG RELEASE=focal
-
-# Install Gazebo and basic ROS dependencies
-RUN apt-get update && \
-    apt-get install -y \
-    # libgoogle-glog-dev \
-    ros-${DIST}-octomap-ros \
-    # Gazebo stuff
-    ${GAZ} \
-    lib${GAZ}-dev \
-    ros-${DIST}-gazebo-plugins \
-    ros-${DIST}-gazebo-ros \
-    ros-${DIST}-gazebo-ros-control \
-    ros-${DIST}-gazebo-ros-pkgs \
-    ros-${DIST}-hector-gazebo-plugins \
-    # Vehicle specific stuff
-    ros-${DIST}-velodyne-gazebo-plugins \
-    ros-${DIST}-velodyne-simulator \
-    && apt-get clean
-
-# Build external dependencies for simulation [vrx and rotors_simulator(uav)]
-# RUN mkdir -p ~/vrx_ws/src && cd ~/vrx_ws/src &&  git clone https://github.com/ethz-asl/mav_comm.git && \
-#     git clone https://github.com/ethz-asl/rotors_simulator.git
-
-RUN mkdir -p ~/vrx_ws/src && cd ~/vrx_ws/src && git clone --depth 1 https://github.com/ngxingyu/vrx.git -b robotx22
-
-RUN source /opt/ros/noetic/setup.bash && \
-    cd ~/vrx_ws && \
-    # catkin build rotors_simulator && \
-    rosdep install -i --from-path src --ignore-src -r -y --rosdistro ${DIST} && \
-    catkin build && source ~/vrx_ws/devel/setup.bash
 
 FROM alpine AS ssh_auth
 # install ssh client and git
@@ -60,7 +11,7 @@ RUN --mount=type=ssh git clone git@github.com:ngxingyu/bbasv_descriptions.git &&
 RUN --mount=type=ssh git clone git@github.com:BumblebeeAS/simulator.git && cd simulator && git checkout deab89d7575b419c64e5b7f0e17d29c78ce75137
 RUN --mount=type=ssh git clone git@github.com:BumblebeeAS/bb_msgs.git && cd bb_msgs && git checkout 869a975ec102de2055818e612758c4bd3c141d49
 
-FROM noetic AS noetic2
+FROM ghcr.io/ngxingyu/simulator_vrx_base:latest
 
 # Build internal simulation packages
 COPY --from=ssh_auth /bbasv_descriptions /root/catkin_ws/src/bbasv_descriptions
@@ -83,6 +34,6 @@ RUN chmod 755 /ros_entrypoint.sh
 
 ADD supervisord.conf /etc/supervisor/supervisord.conf
 
-VOLUME ["/root/vrx_ws/src/", "/home/developer/vrx_ws/src/"]
+VOLUME ["/root/catkin_ws/src/", "/home/developer/catkin_ws/src/"]
 
 CMD ["/usr/local/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
