@@ -20,7 +20,8 @@ ARG DIST=noetic
 ARG RELEASE=focal
 
 # Install Gazebo and basic ROS dependencies
-RUN /bin/sh -c apt-get update && apt-get install -y \
+RUN apt-get update && \
+    apt-get install -y \
     # libgoogle-glog-dev \
     ros-${DIST}-octomap-ros \
     # Gazebo stuff
@@ -34,7 +35,7 @@ RUN /bin/sh -c apt-get update && apt-get install -y \
     # Vehicle specific stuff
     ros-${DIST}-velodyne-gazebo-plugins \
     ros-${DIST}-velodyne-simulator \
-    && source /opt/ros/${DIST}/setup.bash
+    && apt-get clean
 
 # Build external dependencies for simulation [vrx and rotors_simulator(uav)]
 # RUN mkdir -p ~/vrx_ws/src && cd ~/vrx_ws/src &&  git clone https://github.com/ethz-asl/mav_comm.git && \

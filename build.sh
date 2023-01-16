@@ -10,7 +10,7 @@ sudo docker build ./ -f ./devcontainers/noetic/Dockerfile -t ros-devcontainer:no
 sudo docker build ./ -f ./devcontainers/humble/Dockerfile -t ros-devcontainer:humble-dev
 
 sudo docker build --ssh default=${SSH_AUTH_SOCK} simulators/simulator-uuv/ -f simulators/simulator-uuv/Dockerfile -t simulator_uuv:latest
-sudo docker build --ssh default=${SSH_AUTH_SOCK} simulators/simulator-vrx=/ -f simulators/simulator-vrx/Dockerfile -t simulator_vrx:latest
+sudo docker build --ssh default=${SSH_AUTH_SOCK} simulators/simulator-vrx/ -f simulators/simulator-vrx/Dockerfile -t simulator_vrx:latest
 sudo docker build --ssh default=${SSH_AUTH_SOCK} simulators/simulator-vrx-gazebosim/ -f simulators/simulator-vrx-gazebosim/Dockerfile -t simulator_vrx_gazebosim:latest
 # export SSH_AUTH_SOCK="/home/phli/.ssh/id_ed25519"
 # sudo docker build --ssh default=${SSH_AUTH_SOCK} simulators/simulator-uuv/ -f simulators/simulator-uuv/Dockerfile -t simulator_uuv:latest
