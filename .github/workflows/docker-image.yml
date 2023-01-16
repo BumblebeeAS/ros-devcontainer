@@ -23,37 +23,69 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         include:
-          - dockerfile: ./simulator-index/Dockerfile
-            image: ghcr.io/ngxingyu/simulator-index
-            tag: ghcr.io/ngxingyu/simulator-index:latest
-            context: ./simulator-index/
-          - dockerfile: ./ros-index/Dockerfile
-            image: ghcr.io/ngxingyu/ros-index
-            tag: ghcr.io/ngxingyu/ros-index:latest
-            context: ./ros-index/
-          - dockerfile: ./Dockerfile.melodic
+          - dockerfile: ./select-index/Dockerfile
+            image: ghcr.io/ngxingyu/select-index
+            tag: |
+              select-index:latest
+              ghcr.io/ngxingyu/select-index:latest
+            context: ./select-index/
+          - dockerfile: ./devcontainers/melodic/Dockerfile.base
             image: ghcr.io/ngxingyu/ros-devcontainer
-            tag: ghcr.io/ngxingyu/ros-devcontainer:melodic-desktop
+            tag: |
+              ros-devcontainer:melodic-base
+              ghcr.io/ngxingyu/ros-devcontainer:melodic-base
             context: ./
-          - dockerfile: ./Dockerfile.noetic
+          - dockerfile: ./devcontainers/noetic/Dockerfile.base
             image: ghcr.io/ngxingyu/ros-devcontainer
-            tag: ghcr.io/ngxingyu/ros-devcontainer:noetic-desktop
+            tag: |
+              ros-devcontainer:noetic-base
+              ghcr.io/ngxingyu/ros-devcontainer:noetic-base
             context: ./
-          - dockerfile: ./Dockerfile.humble
+          - dockerfile: ./devcontainers/humble/Dockerfile.base
             image: ghcr.io/ngxingyu/ros-devcontainer
-            tag: ghcr.io/ngxingyu/ros-devcontainer:humble-desktop
+            tag: |
+              ros-devcontainer:humble-base
+              ghcr.io/ngxingyu/ros-devcontainer:humble-base
+            context: ./
+          - dockerfile: ./devcontainers/melodic/Dockerfile
+            image: ghcr.io/ngxingyu/ros-devcontainer
+            tag: |
+              ros-devcontainer:melodic-desktop
+              ghcr.io/ngxingyu/ros-devcontainer:melodic-desktop
+            context: ./
+          - dockerfile: ./devcontainers/noetic/Dockerfile
+            image: ghcr.io/ngxingyu/ros-devcontainer
+            tag: |
+              ros-devcontainer:noetic-desktop
+              ghcr.io/ngxingyu/ros-devcontainer:noetic-desktop
+            context: ./
+          - dockerfile: ./devcontainers/humble/Dockerfile
+            image: ghcr.io/ngxingyu/ros-devcontainer
+            tag: |
+              ros-devcontainer:humble-desktop
+              ghcr.io/ngxingyu/ros-devcontainer:humble-desktop
             context: ./
           - dockerfile: ./simulators/simulator-vrx/Dockerfile
             image: ghcr.io/ngxingyu/simulator_vrx
-            tag: ghcr.io/ngxingyu/simulator_vrx:latest
+            tag: |
+              simulator_vrx:latest
+              ghcr.io/ngxingyu/simulator_vrx:latest
             context: ./simulators/simulator-vrx
           - dockerfile: ./simulators/simulator-uuv/Dockerfile
             image: ghcr.io/ngxingyu/simulator_uuv
-            tag: ghcr.io/ngxingyu/simulator_uuv:latest
+            tag: |
+              simulator_uuv:latest
+              ghcr.io/ngxingyu/simulator_uuv:latest
             context: ./simulators/simulator-uuv
+          - dockerfile: ./simulators/simulator-vrx-gazebosim/Dockerfile
+            image: ghcr.io/ngxingyu/simulator_vrx_gazebosim
+            tag: |
+              simulator_vrx_gazebosim:latest
+              ghcr.io/ngxingyu/simulator_vrx_gazebosim:latest
+            context: ./simulators/simulator_vrx_gazebosim
 
     permissions:
       contents: read

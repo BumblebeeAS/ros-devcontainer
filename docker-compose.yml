@@ -14,7 +14,7 @@ services:
       interval: "1s"
       retries: 20
   simulator:
-    image: "simulator_uuv"
+    image: "simulator_vrx"
     ipc: host
     security_opt:
       - seccomp:unconfined

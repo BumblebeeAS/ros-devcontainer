@@ -1,5 +1,5 @@
 # ARG BASE_IMAGE=ghcr.io/ngxingyu/dockwater:noetic
-ARG BASE_IMAGE=ngxingyu/ros-devcontainer:noetic-base
+ARG BASE_IMAGE=ros-devcontainer:noetic-base
 # ARG BASE_IMAGE=ros-devcontainer:noetic-base
 
 FROM maven:3.8.6-openjdk-18 AS xsdcache
@@ -54,7 +54,8 @@ RUN apt-get update && \
     apt-get clean
 
 # need to renew the key for some reason
-RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
+# RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
+RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc
 
 # OSRF distribution is better for gazebo
 RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list' && \
@@ -66,9 +67,25 @@ RUN sh -c 'echo "deb https://deb.nodesource.com/node_14.x `lsb_release -cs` main
 
 # install depending packages
 RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y bash-completion less wget vim-tiny iputils-ping net-tools openssh-client git openjdk-8-jdk-headless nodejs sudo imagemagick byzanz python3-dev libsecret-1-dev && \
-    npm install -g yarn && \
-    apt-get clean
+    apt-get install -y \
+    bash-completion \
+    less \
+    wget \
+    vim-tiny \
+    iputils-ping \
+    net-tools \
+    openssh-client \
+    git \
+    openjdk-8-jdk-headless \
+    nodejs \
+    sudo \
+    imagemagick \
+    byzanz \
+    python3-dev \
+    libsecret-1-dev \
+    xorg-dev\
+    && npm install -g yarn \
+    && apt-get clean
 
 # basic python packages
 RUN apt-get install -y python-is-python3; \
@@ -160,7 +177,7 @@ RUN sudo chown -R ${USER}:${USER} /home/${USER}
 # ENV THEIA_DEFAULT_PLUGINS local-dir:/home/${USER}/plugins
 
 # enter ROS world
-RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
+RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash && source ~/workspace/devel/setup.bash" >> ~/.bashrc
 
 EXPOSE 3000 8888
 

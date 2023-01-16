@@ -1,20 +1,14 @@
-# Modified from dockerwater repo: https://github.com/ngxingyu/dockwater/tree/main/noetic
-# This will act as the base image for both simulations and devcontainers. Gazebo and
-# platform specific plugins will be in the simulators' Dockerfile.
-
-# Tested against: bbasv
-
-FROM ros:noetic-ros-base
+FROM ros:melodic-ros-base
 
 # Set Ubuntu release
-ARG RELEASE=focal
+ARG RELEASE=bionic
 
 # Set ROS distribution
-ARG DIST=noetic
+ARG DIST=melodic
 
-# Required utilities
+# Required utilities 
 RUN apt update \
- && apt install -y --no-install-recommends\
+ && apt install -y --no-install-recommends \
         build-essential \
         cmake \
         cppcheck \
@@ -28,11 +22,10 @@ RUN apt update \
         protobuf-compiler \
         python3-dbg \
         python3-pip \
-        python3-scipy \
+	     python3-scipy \
         python3-venv \
         qtbase5-dev \
         ruby \
-        tmuxinator \
         software-properties-common \
         sudo \
         wget \
@@ -54,17 +47,13 @@ RUN export DEBIAN_FRONTEND=noninteractive \
  && dpkg-reconfigure --frontend noninteractive tzdata \
  && apt clean
 
-# Get ROS
+# Get ROS and Gazebo (note keyserver queries are very unreliable in bionic for some reason)
 RUN /bin/sh -c 'echo "deb http://packages.ros.org/ros/ubuntu ${RELEASE} main" > /etc/apt/sources.list.d/ros1-latest.list' \
- && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654 \
+ && wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | sudo apt-key add - \
  && apt update \
  && apt install -y --no-install-recommends \
-    python-is-python3 \
-    python3-catkin-tools \
-    python3-rosdep \
-    python3-rosinstall \
-    python3-rosinstall-generator \
-    python3-vcstool \
+    python-catkin-tools \
+    python-vcstool \
     ros-${DIST}-image-transport \
     ros-${DIST}-image-transport-plugins \
     ros-${DIST}-image-pipeline \
@@ -77,14 +66,9 @@ RUN /bin/sh -c 'echo "deb http://packages.ros.org/ros/ubuntu ${RELEASE} main" > 
     ros-${DIST}-kdl-parser-py \
     ros-${DIST}-key-teleop \
     ros-${DIST}-move-base \
-    ros-${DIST}-moveit-commander \
-    ros-${DIST}-moveit-planners \
-    ros-${DIST}-moveit-simple-controller-manager \
-    ros-${DIST}-moveit-ros-visualization \
     ros-${DIST}-robot-localization \
     ros-${DIST}-robot-state-publisher \
     ros-${DIST}-ros-base \
-    ros-${DIST}-ros-controllers \
     ros-${DIST}-rqt \
     ros-${DIST}-rqt-common-plugins \
     ros-${DIST}-rqt-robot-plugins \
@@ -95,9 +79,11 @@ RUN /bin/sh -c 'echo "deb http://packages.ros.org/ros/ubuntu ${RELEASE} main" > 
     ros-${DIST}-tf2-geometry-msgs \
     ros-${DIST}-tf2-tools \
     ros-${DIST}-urdfdom-py \
+    ros-${DIST}-velodyne-simulator \
     ros-${DIST}-xacro \
-    ros-${DIST}-roslint \
  && apt clean
+
+RUN pip3 install numpy
 
 # Optional: Dev. tools, applications, etc.
 RUN apt-get update && apt-get install -y --no-install-recommends \

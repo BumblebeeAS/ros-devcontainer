@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:experimental
 
-FROM ngxingyu/ros-devcontainer:noetic-base as noetic
+FROM ros-devcontainer:noetic-base as noetic
 
 SHELL ["/bin/bash", "-c"]
 
@@ -38,6 +38,7 @@ RUN --mount=type=ssh git clone git@github.com:BumblebeeAS/simulator.git && cd si
 RUN --mount=type=ssh git clone git@github.com:BumblebeeAS/bb_msgs.git && cd bb_msgs && git checkout 869a975ec102de2055818e612758c4bd3c141d49
 
 FROM noetic as noetic2
+
 
 COPY --from=ssh_auth /bbauv_descriptions /root/catkin_ws/src/bbauv_descriptions
 COPY --from=ssh_auth /simulator /root/catkin_ws/src/simulator

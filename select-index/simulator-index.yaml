@@ -4,7 +4,7 @@ simulators:
      Simulator for asv
     level: advanced
     distribution: noetic
-    original_url: https://github.com/uuvsimulator/uuv_simulator
+    original_url: https://github.com/osrf/vrx
     license: Apache 2.0
   - image: simulator_uuv
     description: >
@@ -12,6 +12,13 @@ simulators:
     level: advanced
     distribution: noetic
     original_url: https://github.com/uuvsimulator/uuv_simulator
+    license: Apache 2.0
+  - image: simulator_vrx_gazebosim
+    description: >
+     Simulator for asv
+    level: advanced
+    distribution: humble
+    original_url: https://github.com/osrf/vrx
     license: Apache 2.0
   - image: devrt/simulator-empty
     description: >

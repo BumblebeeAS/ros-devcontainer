@@ -1,5 +1,0 @@
-ros:
-  - image: melodic
-  - image: noetic
-  - image: foxy
-  - image: humble
