@@ -14,6 +14,11 @@ RUN pip3 install -U --no-cache-dir supervisor supervisor_twiddler
 RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list' && \
     curl -L http://packages.osrfoundation.org/gazebo.key | apt-key add -
 
+# Set Gazebo version
+ARG GAZ=gazebo11
+ARG DIST=noetic
+ARG RELEASE=focal
+
 # Install Gazebo and basic ROS dependencies
 RUN /bin/sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable ${RELEASE} main" > /etc/apt/sources.list.d/gazebo-stable.list' \
  && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys D2486D2DD83DB69272AFE98867170598AF249743 \
