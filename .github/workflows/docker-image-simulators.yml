@@ -88,14 +88,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      -   name: Setup SSH Keys and known_hosts
-          env:
-              SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-          run: |
-              mkdir -p ~/.ssh
-              ssh-keyscan github.com >> ~/.ssh/known_hosts
-              ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-              ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"        
+      - uses: webfactory/ssh-agent@v0.7.0
+        with:
+            ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }} 
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
@@ -132,11 +127,11 @@ jobs:
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
       - name: Build and push Docker image
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         id: build-and-push
         uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
         with:
+          ssh: |
+            default=${{ env.SSH_AUTH_SOCK }}
           context: ${{ matrix.context }}
           file: ${{ matrix.dockerfile }}
           push: ${{ github.event_name != 'pull_request' }}
