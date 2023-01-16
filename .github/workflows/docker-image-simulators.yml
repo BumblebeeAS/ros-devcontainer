@@ -23,7 +23,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         include:
           # - dockerfile: ./select-index/Dockerfile
@@ -75,7 +75,7 @@ jobs:
             image: ghcr.io/ngxingyu/simulator_vrx_gazebosim
             tag: |
               ghcr.io/ngxingyu/simulator_vrx_gazebosim:latest
-            context: ./simulators/simulator_vrx_gazebosim
+            context: ./simulators/simulator-vrx-gazebosim
 
     permissions:
       contents: read
