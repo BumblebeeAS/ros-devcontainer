@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:experimental
 # FROM ngxingyu/ros-devcontainer:humble-base as humble
 # FROM ghcr.io/ngxingyu/dockwater:humble as humble
-FROM ros-devcontainer:humble-base as humble
+FROM ghcr.io/ngxingyu/ros-devcontainer:humble-base as humble
 
 
 SHELL ["/bin/bash", "-c"]

@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-FROM ros-devcontainer:noetic-base as noetic
+FROM ghcr.io/ngxingyu/ros-devcontainer:noetic-base as noetic
 
 SHELL ["/bin/bash", "-c"]
 
