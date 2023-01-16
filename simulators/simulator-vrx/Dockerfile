@@ -20,9 +20,7 @@ ARG DIST=noetic
 ARG RELEASE=focal
 
 # Install Gazebo and basic ROS dependencies
-RUN /bin/sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable ${RELEASE} main" > /etc/apt/sources.list.d/gazebo-stable.list' \
- && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys D2486D2DD83DB69272AFE98867170598AF249743 \
- && apt-get update && apt-get install -y \
+RUN /bin/sh -c apt-get update && apt-get install -y \
     # libgoogle-glog-dev \
     ros-${DIST}-octomap-ros \
     # Gazebo stuff
