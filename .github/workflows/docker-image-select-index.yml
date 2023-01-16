@@ -1,4 +1,4 @@
-name: Docker base images
+name: Docker select-index
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -26,26 +26,26 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # - dockerfile: ./select-index/Dockerfile
-          #   image: ghcr.io/ngxingyu/select-index
+          - dockerfile: ./select-index/Dockerfile
+            image: ghcr.io/ngxingyu/select-index
+            tag: |
+              ghcr.io/ngxingyu/select-index:latest
+            context: ./select-index/
+          # - dockerfile: ./devcontainers/melodic/Dockerfile.base
+          #   image: ghcr.io/ngxingyu/ros-devcontainer
           #   tag: |
-          #     ghcr.io/ngxingyu/select-index:latest
-          #   context: ./select-index/
-          - dockerfile: ./devcontainers/melodic/Dockerfile.base
-            image: ghcr.io/ngxingyu/ros-devcontainer
-            tag: |
-              ghcr.io/ngxingyu/ros-devcontainer:melodic-base
-            context: ./
-          - dockerfile: ./devcontainers/noetic/Dockerfile.base
-            image: ghcr.io/ngxingyu/ros-devcontainer
-            tag: |
-              ghcr.io/ngxingyu/ros-devcontainer:noetic-base
-            context: ./
-          - dockerfile: ./devcontainers/humble/Dockerfile.base
-            image: ghcr.io/ngxingyu/ros-devcontainer
-            tag: |
-              ghcr.io/ngxingyu/ros-devcontainer:humble-base
-            context: ./
+          #     ghcr.io/ngxingyu/ros-devcontainer:melodic-base
+          #   context: ./
+          # - dockerfile: ./devcontainers/noetic/Dockerfile.base
+          #   image: ghcr.io/ngxingyu/ros-devcontainer
+          #   tag: |
+          #     ghcr.io/ngxingyu/ros-devcontainer:noetic-base
+          #   context: ./
+          # - dockerfile: ./devcontainers/humble/Dockerfile.base
+          #   image: ghcr.io/ngxingyu/ros-devcontainer
+          #   tag: |
+          #     ghcr.io/ngxingyu/ros-devcontainer:humble-base
+          #   context: ./
           # - dockerfile: ./devcontainers/melodic/Dockerfile
           #   image: ghcr.io/ngxingyu/ros-devcontainer
           #   tag: |

@@ -1,4 +1,4 @@
-name: Docker base images
+name: Docker devcontainer images
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -23,7 +23,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         include:
           # - dockerfile: ./select-index/Dockerfile
@@ -31,36 +31,36 @@ jobs:
           #   tag: |
           #     ghcr.io/ngxingyu/select-index:latest
           #   context: ./select-index/
-          - dockerfile: ./devcontainers/melodic/Dockerfile.base
-            image: ghcr.io/ngxingyu/ros-devcontainer
-            tag: |
-              ghcr.io/ngxingyu/ros-devcontainer:melodic-base
-            context: ./
-          - dockerfile: ./devcontainers/noetic/Dockerfile.base
-            image: ghcr.io/ngxingyu/ros-devcontainer
-            tag: |
-              ghcr.io/ngxingyu/ros-devcontainer:noetic-base
-            context: ./
-          - dockerfile: ./devcontainers/humble/Dockerfile.base
-            image: ghcr.io/ngxingyu/ros-devcontainer
-            tag: |
-              ghcr.io/ngxingyu/ros-devcontainer:humble-base
-            context: ./
-          # - dockerfile: ./devcontainers/melodic/Dockerfile
+          # - dockerfile: ./devcontainers/melodic/Dockerfile.base
           #   image: ghcr.io/ngxingyu/ros-devcontainer
           #   tag: |
-          #     ghcr.io/ngxingyu/ros-devcontainer:melodic-desktop
+          #     ghcr.io/ngxingyu/ros-devcontainer:melodic-base
           #   context: ./
-          # - dockerfile: ./devcontainers/noetic/Dockerfile
+          # - dockerfile: ./devcontainers/noetic/Dockerfile.base
           #   image: ghcr.io/ngxingyu/ros-devcontainer
           #   tag: |
-          #     ghcr.io/ngxingyu/ros-devcontainer:noetic-desktop
+          #     ghcr.io/ngxingyu/ros-devcontainer:noetic-base
           #   context: ./
-          # - dockerfile: ./devcontainers/humble/Dockerfile
+          # - dockerfile: ./devcontainers/humble/Dockerfile.base
           #   image: ghcr.io/ngxingyu/ros-devcontainer
           #   tag: |
-          #     ghcr.io/ngxingyu/ros-devcontainer:humble-desktop
+          #     ghcr.io/ngxingyu/ros-devcontainer:humble-base
           #   context: ./
+          - dockerfile: ./devcontainers/melodic/Dockerfile
+            image: ghcr.io/ngxingyu/ros-devcontainer
+            tag: |
+              ghcr.io/ngxingyu/ros-devcontainer:melodic-desktop
+            context: ./
+          - dockerfile: ./devcontainers/noetic/Dockerfile
+            image: ghcr.io/ngxingyu/ros-devcontainer
+            tag: |
+              ghcr.io/ngxingyu/ros-devcontainer:noetic-desktop
+            context: ./
+          - dockerfile: ./devcontainers/humble/Dockerfile
+            image: ghcr.io/ngxingyu/ros-devcontainer
+            tag: |
+              ghcr.io/ngxingyu/ros-devcontainer:humble-desktop
+            context: ./
           # - dockerfile: ./simulators/simulator-vrx/Dockerfile
           #   image: ghcr.io/ngxingyu/simulator_vrx
           #   tag: |

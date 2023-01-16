@@ -1,4 +1,4 @@
-name: Docker
+name: Docker simulator images
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -46,21 +46,21 @@ jobs:
           #   tag: |
           #     ghcr.io/ngxingyu/ros-devcontainer:humble-base
           #   context: ./
-          - dockerfile: ./devcontainers/melodic/Dockerfile
-            image: ghcr.io/ngxingyu/ros-devcontainer
-            tag: |
-              ghcr.io/ngxingyu/ros-devcontainer:melodic-desktop
-            context: ./
-          - dockerfile: ./devcontainers/noetic/Dockerfile
-            image: ghcr.io/ngxingyu/ros-devcontainer
-            tag: |
-              ghcr.io/ngxingyu/ros-devcontainer:noetic-desktop
-            context: ./
-          - dockerfile: ./devcontainers/humble/Dockerfile
-            image: ghcr.io/ngxingyu/ros-devcontainer
-            tag: |
-              ghcr.io/ngxingyu/ros-devcontainer:humble-desktop
-            context: ./
+          # - dockerfile: ./devcontainers/melodic/Dockerfile
+          #   image: ghcr.io/ngxingyu/ros-devcontainer
+          #   tag: |
+          #     ghcr.io/ngxingyu/ros-devcontainer:melodic-desktop
+          #   context: ./
+          # - dockerfile: ./devcontainers/noetic/Dockerfile
+          #   image: ghcr.io/ngxingyu/ros-devcontainer
+          #   tag: |
+          #     ghcr.io/ngxingyu/ros-devcontainer:noetic-desktop
+          #   context: ./
+          # - dockerfile: ./devcontainers/humble/Dockerfile
+          #   image: ghcr.io/ngxingyu/ros-devcontainer
+          #   tag: |
+          #     ghcr.io/ngxingyu/ros-devcontainer:humble-desktop
+          #   context: ./
           - dockerfile: ./simulators/simulator-vrx/Dockerfile
             image: ghcr.io/ngxingyu/simulator_vrx
             tag: |
