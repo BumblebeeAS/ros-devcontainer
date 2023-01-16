@@ -2,6 +2,7 @@ version: '2.4'
 services:
   xserver:
     image: devrt/xserver
+    pull_policy: always
     ipc: host
     security_opt:
       - seccomp:unconfined
@@ -14,7 +15,7 @@ services:
       interval: "1s"
       retries: 20
   simulator:
-    image: "simulator_vrx"
+    image: ghcr.io/ngxingyu/simulator_vrx_gazebosim:latest
     ipc: host
     security_opt:
       - seccomp:unconfined
@@ -35,7 +36,7 @@ services:
   workspace:
     # env_file:
     #   - .env
-    image: ros-devcontainer:noetic-dev
+    image: ghcr.io/ngxingyu/ros-devcontainer:humble-desktop
     ipc: host
     security_opt:
       - seccomp:unconfined
@@ -43,8 +44,8 @@ services:
       - "3001:3000"
       - "3002:8888"
     volumes:
-      - auv_workspace:/workspace # persist the devel / install folder across sessions
-      - ../bbauv_ws/src:/workspace/src # bind-mount auv workspace
+      # - auv_workspace:/workspace # persist the devel / install folder across sessions
+      - ../simulator_vrx_gazebosim:/workspace # bind-mount auv workspace
       # - asv_workspace:/workspace # persist the devel / install folder across sessions
       # - ../bbasv_ws/src:/workspace/src # bind-mount asv workspace
     environment:
@@ -62,6 +63,6 @@ services:
       #         - driver: nvidia
       #           count: 1
       #           capabilities: [gpu]
-volumes:
-  asv_workspace: # volume
-  auv_workspace: # volume
+# volumes:
+#   asv_workspace: # volume
+#   auv_workspace: # volume

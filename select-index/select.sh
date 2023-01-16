@@ -2,13 +2,13 @@
 
 export IMAGE=$(yq '.ros.[] | select(has("image"))|.image' /ros-index.yaml | fzf)
 echo "Updating docker-compose.yml to use ${IMAGE} ros base image ..."
-yq -i '.services.workspace.image = "ros-devcontainer:"+strenv(IMAGE)+"-dev"' /work/docker-compose.yml
+yq -i '.services.workspace.image = "ghcr.io/ngxingyu/ros-devcontainer:"+strenv(IMAGE)+"-desktop"' /work/docker-compose.yml
 echo "done."
 echo "Your ros environment is ready."
 
 export IMAGE=$(yq '.simulators.[] | select(has("image"))|.image' /simulator-index.yaml | fzf --preview "yq '.simulators.[] | select(.image==\"{}\")' /simulator-index.yaml")
 echo "Updating docker-compose.yml to use ${IMAGE} simulation container..."
-yq -i '.services.simulator.image = strenv(IMAGE)' /work/docker-compose.yml
+yq -i '.services.simulator.image = "ghcr.io/ngxingyu/"+strenv(IMAGE)+":latest"' /work/docker-compose.yml
 export VOLUME="../${IMAGE}:/workspace"
 yq -i '.services.workspace.volumes.[] |= strenv(VOLUME)' /work/docker-compose.yml
 echo "done."
