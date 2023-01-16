@@ -26,7 +26,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - dockerfile: ./simulators/simulator-vrx/Dockerfile/base
+          - dockerfile: ./simulators/simulator-vrx/Dockerfile.base
             image: ghcr.io/ngxingyu/simulator_vrx_base
             tag: |
               ghcr.io/ngxingyu/simulator_vrx_base:latest
@@ -36,7 +36,7 @@ jobs:
             tag: |
               ghcr.io/ngxingyu/simulator_uuv_base:latest
             context: ./simulators/simulator-uuv
-          - dockerfile: ./simulators/simulator-vrx-gazebosim/Dockerfile
+          - dockerfile: ./simulators/simulator-vrx-gazebosim/Dockerfile.base
             image: ghcr.io/ngxingyu/simulator_vrx_gazebosim_base
             tag: |
               ghcr.io/ngxingyu/simulator_vrx_gazebosim_base:latest
