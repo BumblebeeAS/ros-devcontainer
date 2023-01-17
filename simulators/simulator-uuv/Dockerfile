@@ -17,11 +17,8 @@ COPY --from=ssh_auth /bbauv_descriptions /root/catkin_ws/src/bbauv_descriptions
 COPY --from=ssh_auth /simulator /root/catkin_ws/src/simulator
 COPY --from=ssh_auth /bb_msgs /root/catkin_ws/src/bb_msgs
 
-# Currently imports entire simulator repo, to try separating auv and asv code into separate repos.
-RUN cd /root/catkin_ws/src && source /opt/ros/noetic/setup.bash && \
-    vcs import < snapshot.repos && \
-    cd /root/catkin_ws && \
-    rosdep install --from-paths src --ignore-src -r -y --rosdistro noetic && \
+RUN source /opt/ros/noetic/setup.bash && source /root/uuv_ws/devel/setup.bash && \
+    cd /root/catkin_ws && rosdep install --from-paths src --ignore-src -r -y --rosdistro noetic && \
     catkin config -a --blacklist bbasv_gazebo_plugins bbasv_gazebo_worlds bbuav_gazebo_plugins asv_urdf vrx_urdf && \
     catkin build
 
