@@ -120,6 +120,12 @@ RUN useradd -m ${USER} && \
 #     catkin_make install -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/ros/$ROS_DISTRO -DCATKIN_ENABLE_TESTING=0 && \
 #     cd / && rm -r /bio_ik_ws
 
+# eigen quadprog for controls
+RUN curl -1sLf \
+  'https://dl.cloudsmith.io/public/mc-rtc/stable/setup.deb.sh' \
+  | sudo -E bash && apt-get update && apt-get upgrade && apt-get install -y libeigen-quadprog-dev \
+    && apt-get clean
+
 # configure services
 RUN mkdir -p /etc/supervisor/conf.d
 COPY .devcontainer/supervisord.conf /etc/supervisor/supervisord.conf
