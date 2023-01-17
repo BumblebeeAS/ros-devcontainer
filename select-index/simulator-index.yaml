@@ -1,19 +1,19 @@
 simulators:
-  - image: simulator_vrx
+  - image: ghcr.io/ngxingyu/simulator_vrx
     description: >
      Simulator for asv
     level: advanced
     distribution: noetic
     original_url: https://github.com/osrf/vrx
     license: Apache 2.0
-  - image: simulator_uuv
+  - image: ghcr.io/ngxingyu/simulator_uuv
     description: >
      Simulator for asv
     level: advanced
     distribution: noetic
     original_url: https://github.com/uuvsimulator/uuv_simulator
     license: Apache 2.0
-  - image: simulator_vrx_gazebosim
+  - image: ghcr.io/ngxingyu/simulator_vrx_gazebosim
     description: >
      Simulator for asv
     level: advanced

@@ -1,4 +1,7 @@
 ros:
-  - image: melodic
-  - image: noetic
-  - image: humble
+  - image: ghcr.io/ngxingyu/ros-devcontainer:melodic-base
+  - image: ghcr.io/ngxingyu/ros-devcontainer:noetic-base
+  - image: ghcr.io/ngxingyu/ros-devcontainer:humble-base
+  - image: ghcr.io/ngxingyu/ros-devcontainer:melodic-dev
+  - image: ghcr.io/ngxingyu/ros-devcontainer:noetic-dev
+  - image: ghcr.io/ngxingyu/ros-devcontainer:humble-dev
