@@ -8,8 +8,12 @@ name: Docker select-index
 on:
   workflow_dispatch:
   push:
+    paths:
+      - select-index/**
     branches: [ "main" ]
   pull_request:
+    paths:
+      - select-index/**
     branches: [ "main" ]
 
 env:
