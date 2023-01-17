@@ -30,7 +30,7 @@ RUN source /opt/ros/noetic/setup.bash && source ~/vrx_ws/devel/setup.bash && cd 
 ADD ros_entrypoint.sh /ros_entrypoint.sh
 RUN chmod 755 /ros_entrypoint.sh
 
-# RUN sh -c 'echo "source /opt/ros/noetic/setup.bash && source ~/vrx_ws/devel/setup.bash && source ~/catkin_ws/devel/setup.bash" > ~/.bashrc'
+RUN sh -c 'echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc'
 
 ADD supervisord.conf /etc/supervisor/supervisord.conf
 

@@ -26,7 +26,7 @@ RUN source /opt/ros/humble/setup.bash && \
 ADD ros_entrypoint.sh /ros_entrypoint.sh
 RUN chmod 755 /ros_entrypoint.sh
 
-RUN sh -c 'echo "source ~/colcon_ws/install/setup.bash" > ~/.bashrc'
+RUN sh -c 'echo "source ~/colcon_ws/install/setup.bash" >> ~/.bashrc'
 
 ADD supervisord.conf /etc/supervisor/supervisord.conf
 
