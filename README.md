@@ -49,7 +49,7 @@ ssh-add ~/.ssh/YOUR_PRIVATE_KEY # add key which can access all above repositorie
 build.sh
 </code>
   - Select the simulation environment and the ros version using `./select-env.sh`
-  - Specify any settings or volumes you want to bind to the workspace container by changing the docker volume under workspace in `docker-compose.yml`. By default, the entire workspace will be bind-mounted to a folder corresponding to the ros container image name under `.volumes`.
+  - Specify any settings or volumes you want to bind to the workspace container by changing the docker volume under workspace in `docker-compose.yml`.
   - Run `docker-compose pull && docker-compose up` to launch the `xserver`, `simulation` container and the ros workspace container. Ensure your `DISPLAY` env variable is set correctly. You should be able to view the guis by visiting `localhost:3000`.
   - In a new shell, run `./join.bash <container_name>` e.g. `./join.bash ros-devcontainer-workspace-1` to start a shell in the container. Alternatively, use vscode to attach the container that you want to work on.
 
