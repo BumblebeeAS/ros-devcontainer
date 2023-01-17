@@ -9,10 +9,10 @@ on:
   workflow_dispatch:
   push:
     branches: [ "main" ]
-    paths: ['simulators/**/Dockerfile.base']
+    paths: ['simulators/**/Dockerfile']
   pull_request:
     branches: [ "main" ]
-    paths: ['simulators/**/Dockerfile.base']
+    paths: ['simulators/**/Dockerfile']
 
 env:
   # Use docker.io for Docker Hub if empty
