@@ -35,7 +35,7 @@ COPY --from=ssh_auth /simulator /root/catkin_ws/src/simulator
 COPY --from=ssh_auth /bb_msgs /root/catkin_ws/src/bb_msgs
 
 RUN sudo chown -R ${USER}:${USER} ${HOME}
-RUN source /opt/ros/noetic/setup.bash && source ~/vrx_ws/devel/setup.bash && \
+RUN source /opt/ros/noetic/setup.bash && \
     cd ~/catkin_ws && \
     catkin config -a --blacklist bbuav_gazebo_plugins && \
     catkin build bbasv_gazebo_plugins bbasv_gazebo_worlds vrx_urdf asv_urdf bb_sim_bridge
