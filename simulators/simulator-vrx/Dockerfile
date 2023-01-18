@@ -40,9 +40,6 @@ RUN source /opt/ros/noetic/setup.bash && \
     catkin config -a --blacklist bbuav_gazebo_plugins && \
     catkin build bbasv_gazebo_plugins bbasv_gazebo_worlds vrx_urdf asv_urdf bb_sim_bridge
 
-# COPY marker /dev/null
-ADD ros_entrypoint.sh /ros_entrypoint.sh
-RUN chmod 755 /ros_entrypoint.sh
 
 RUN sh -c 'echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc'
 
