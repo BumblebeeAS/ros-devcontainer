@@ -30,9 +30,9 @@ ENV SHELL /bin/bash
 RUN rosdep update
 
 # Build internal simulation packages
-COPY --from=ssh_auth /bbasv_descriptions /root/catkin_ws/src/bbasv_descriptions
-COPY --from=ssh_auth /simulator /root/catkin_ws/src/simulator
-COPY --from=ssh_auth /bb_msgs /root/catkin_ws/src/bb_msgs
+COPY --from=ssh_auth /bbasv_descriptions ${HOME}/catkin_ws/src/bbasv_descriptions
+COPY --from=ssh_auth /simulator ${HOME}/catkin_ws/src/simulator
+COPY --from=ssh_auth /bb_msgs ${HOME}/catkin_ws/src/bb_msgs
 
 RUN sudo chown -R ${USER}:${USER} ${HOME}
 RUN source /opt/ros/noetic/setup.bash && \
