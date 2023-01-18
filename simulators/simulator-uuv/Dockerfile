@@ -34,6 +34,11 @@ COPY --from=ssh_auth /simulator ${HOME}/catkin_ws/src/simulator
 COPY --from=ssh_auth /bb_msgs ${HOME}/catkin_ws/src/bb_msgs
 
 RUN sudo chown -R ${USER}:${USER} /home/${USER}
+RUN cd ${HOME}/catkin_ws/src && \
+    git clone https://github.com/ngxingyu/simulation_utils.git && \
+    git clone https://github.com/andreasBihlmaier/pysdf.git && \
+    git clone https://github.com/andreasBihlmaier/gazebo2rviz.git
+
 RUN source /opt/ros/noetic/setup.bash && \
     cd ${HOME}/catkin_ws && rosdep install --from-paths src --ignore-src -r -y --rosdistro noetic && \
     catkin config -a --blacklist bbasv_gazebo_plugins bbasv_gazebo_worlds bbuav_gazebo_plugins asv_urdf vrx_urdf && \
