@@ -37,28 +37,15 @@ RUN apt-get update && \
     ros-${DIST}-velodyne-simulator \
     && apt-get clean
 
-# Build external dependencies for simulation [vrx and rotors_simulator(uav)]
-# RUN mkdir -p ~/vrx_ws/src && cd ~/vrx_ws/src &&  git clone https://github.com/ethz-asl/mav_comm.git && \
-#     git clone https://github.com/ethz-asl/rotors_simulator.git
-
-RUN mkdir -p ~/vrx_ws/src && cd ~/vrx_ws/src && git clone --depth 1 https://github.com/ngxingyu/vrx.git -b robotx22
-
 RUN source /opt/ros/noetic/setup.bash && \
-    cd ~/vrx_ws && \
-    # catkin build rotors_simulator && \
-    rosdep install -i --from-path src --ignore-src -r -y --rosdistro ${DIST} && \
-    catkin build && source ~/vrx_ws/devel/setup.bash
-
-# RUN apt-get update && apt-get install -y mesa-utils bash libxtst6:amd64 libgl1-mesa-glx:amd64 libegl1-mesa && curl -L https://sourceforge.net/projects/virtualgl/files/3.0.2/virtualgl_3.0.2_amd64.deb/download --output virtualgl_3.0.2_amd64.deb && \ 
-#     dpkg -i virtualgl_3.0.2_amd64.deb && apt --fix-broken install && dpkg -i virtualgl_3.0.2_amd64.deb && rm -rf /var/lib/apt/lists/*
-# RUN printf "1\nn\nn\nn\nx\n" | /opt/VirtualGL/bin/vglserver_config
+    mkdir -p /vrx_ws/src && cd /vrx_ws/src && catkin_init_workspace && \
+    git clone --depth 1 https://github.com/ngxingyu/vrx.git -b robotx22 && \
+    cd /vrx_ws && rosdep install -i --from-path src --ignore-src -r -y --rosdistro ${DIST} && \
+    catkin_make install -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/ros/$ROS_DISTRO -DCATKIN_ENABLE_TESTING=0 && \
+    cd / && rm -r /vrx_ws
 
 # COPY marker /dev/null
 ADD ros_entrypoint.sh /ros_entrypoint.sh
 RUN chmod 755 /ros_entrypoint.sh
 
-RUN sh -c 'echo "source /opt/ros/noetic/setup.bash && source ~/vrx_ws/devel/setup.bash" >> ~/.bashrc'
-
-ADD supervisord.conf /etc/supervisor/supervisord.conf
-
-VOLUME ["/root/vrx_ws/src/", "/home/developer/vrx_ws/src/"]
+RUN sh -c 'echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc'

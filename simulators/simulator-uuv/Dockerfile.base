@@ -19,28 +19,20 @@ RUN pip3 install -U --no-cache-dir supervisor supervisor_twiddler
 RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list' && \
     curl -L http://packages.osrfoundation.org/gazebo.key | apt-key add -
 
-
 RUN apt-get update && apt-get install -y ros-noetic-rviz && \
     apt-get clean
 
-RUN mkdir -p ~/uuv_ws/src && cd ~/uuv_ws/src && git clone --depth 1 https://github.com/ngxingyu/uuv_simulator.git -b noetic
-
+# init rosdep
+RUN rosdep update
 
 RUN source /opt/ros/noetic/setup.bash && \
-    cd ~/uuv_ws && \
-    # catkin build rotors_simulator && \
-    rosdep install -i --from-path src --ignore-src -r -y --rosdistro ${DIST} && \
-    catkin build && source ~/uuv_ws/devel/setup.bash
-
-# RUN git clone --depth 1 https://github.com/osrf/uctf.git /tmp/uctf && \
-#     cp -r /tmp/uctf/models/iris_with_standoffs_demo /usr/share/gazebo-11/models/ && \
-#     rm -r /tmp/uctf
+    mkdir -p /uuv_ws/src && cd /uuv_ws/src && catkin_init_workspace && \
+    git clone --depth 1 https://github.com/ngxingyu/uuv_simulator.git -b noetic && \
+    cd /uuv_ws && rosdep install -i --from-path src --ignore-src -r -y --rosdistro ${DIST} && \
+    catkin_make install -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/ros/$ROS_DISTRO -DCATKIN_ENABLE_TESTING=0 && \
+    cd / && rm -r /uuv_ws
 
 ADD ros_entrypoint.sh /ros_entrypoint.sh
 RUN chmod 755 /ros_entrypoint.sh
 
-RUN sh -c 'echo "source /opt/ros/noetic/setup.bash && source ~/uuv_ws/devel/setup.bash" > ~/.bashrc'
-
-# ADD supervisord.conf /etc/supervisor/supervisord.conf
-
-VOLUME ["/root/uuv_ws/src/"]
+RUN sh -c 'echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc'

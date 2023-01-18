@@ -13,18 +13,32 @@ RUN --mount=type=ssh git clone git@github.com:BumblebeeAS/bb_msgs.git && cd bb_m
 
 FROM ghcr.io/ngxingyu/simulator_vrx_base:latest
 
+ADD supervisord.conf /etc/supervisor/supervisord.conf
+
+ENV USER=developer
+# add non-root user
+RUN useradd -m ${USER} && \
+    echo ${USER} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USER} && \
+    chmod 0440 /etc/sudoers.d/${USER}
+USER ${USER}
+WORKDIR /home/${USER}
+
+ENV HOME /home/${USER}
+ENV SHELL /bin/bash
+
+# init rosdep
+RUN rosdep update
+
 # Build internal simulation packages
 COPY --from=ssh_auth /bbasv_descriptions /root/catkin_ws/src/bbasv_descriptions
 COPY --from=ssh_auth /simulator /root/catkin_ws/src/simulator
 COPY --from=ssh_auth /bb_msgs /root/catkin_ws/src/bb_msgs
 
-RUN source /opt/ros/noetic/setup.bash && source ~/vrx_ws/devel/setup.bash && cd ~/catkin_ws && \
+RUN sudo chown -R ${USER}:${USER} ${HOME}
+RUN source /opt/ros/noetic/setup.bash && source ~/vrx_ws/devel/setup.bash && \
+    cd ~/catkin_ws && \
     catkin config -a --blacklist bbuav_gazebo_plugins && \
     catkin build bbasv_gazebo_plugins bbasv_gazebo_worlds vrx_urdf asv_urdf bb_sim_bridge
-
-# RUN apt-get update && apt-get install -y mesa-utils bash libxtst6:amd64 libgl1-mesa-glx:amd64 libegl1-mesa && curl -L https://sourceforge.net/projects/virtualgl/files/3.0.2/virtualgl_3.0.2_amd64.deb/download --output virtualgl_3.0.2_amd64.deb && \ 
-#     dpkg -i virtualgl_3.0.2_amd64.deb && apt --fix-broken install && dpkg -i virtualgl_3.0.2_amd64.deb && rm -rf /var/lib/apt/lists/*
-# RUN printf "1\nn\nn\nn\nx\n" | /opt/VirtualGL/bin/vglserver_config
 
 # COPY marker /dev/null
 ADD ros_entrypoint.sh /ros_entrypoint.sh
@@ -32,8 +46,6 @@ RUN chmod 755 /ros_entrypoint.sh
 
 RUN sh -c 'echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc'
 
-ADD supervisord.conf /etc/supervisor/supervisord.conf
+VOLUME ["${HOME}/catkin_ws/src/"]
 
-VOLUME ["/root/catkin_ws/src/", "/home/developer/catkin_ws/src/"]
-
-CMD ["/usr/local/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+CMD [ "sudo", "-E", "/usr/local/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]

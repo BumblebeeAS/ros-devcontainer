@@ -13,22 +13,34 @@ RUN --mount=type=ssh git clone git@github.com:BumblebeeAS/bb_msgs.git && cd bb_m
 
 FROM ghcr.io/ngxingyu/simulator_uuv_base:latest
 
-COPY --from=ssh_auth /bbauv_descriptions /root/catkin_ws/src/bbauv_descriptions
-COPY --from=ssh_auth /simulator /root/catkin_ws/src/simulator
-COPY --from=ssh_auth /bb_msgs /root/catkin_ws/src/bb_msgs
+ADD supervisord.conf /etc/supervisor/supervisord.conf
 
-RUN source /opt/ros/noetic/setup.bash && source /root/uuv_ws/devel/setup.bash && \
-    cd /root/catkin_ws && rosdep install --from-paths src --ignore-src -r -y --rosdistro noetic && \
+ENV USER=developer
+# add non-root user
+RUN useradd -m ${USER} && \
+    echo ${USER} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USER} && \
+    chmod 0440 /etc/sudoers.d/${USER}
+USER ${USER}
+WORKDIR /home/${USER}
+
+ENV HOME /home/${USER}
+ENV SHELL /bin/bash
+
+# init rosdep
+RUN rosdep update
+
+COPY --from=ssh_auth /bbauv_descriptions ${HOME}/catkin_ws/src/bbauv_descriptions
+COPY --from=ssh_auth /simulator ${HOME}/catkin_ws/src/simulator
+COPY --from=ssh_auth /bb_msgs ${HOME}/catkin_ws/src/bb_msgs
+
+RUN sudo chown -R ${USER}:${USER} /home/${USER}
+RUN source /opt/ros/noetic/setup.bash && \
+    cd ${HOME}/catkin_ws && rosdep install --from-paths src --ignore-src -r -y --rosdistro noetic && \
     catkin config -a --blacklist bbasv_gazebo_plugins bbasv_gazebo_worlds bbuav_gazebo_plugins asv_urdf vrx_urdf && \
     catkin build
 
-ADD ros_entrypoint.sh /ros_entrypoint.sh
-RUN chmod 755 /ros_entrypoint.sh
-
 RUN sh -c 'echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc'
 
-ADD supervisord.conf /etc/supervisor/supervisord.conf
+VOLUME ["${HOME}/catkin_ws/src/"]
 
-VOLUME ["/root/catkin_ws/src/", "/home/developer/catkin_ws/src/"]
-
-CMD ["/usr/local/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+CMD [ "sudo", "-E", "/usr/local/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
