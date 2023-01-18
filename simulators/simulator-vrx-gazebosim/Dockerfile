@@ -14,22 +14,30 @@ RUN --mount=type=ssh git clone git@github.com:BumblebeeAS/bb_msgs.git && cd bb_m
 
 FROM ghcr.io/ngxingyu/simulator_vrx_gazebosim_base:latest
 
-COPY --from=ssh_auth /bbasv_descriptions /root/colcon_ws/src/bbasv_descriptions
-# COPY --from=ssh_auth /simulator /root/colcon_ws/src/simulator # to migrate to ros2
-COPY --from=ssh_auth /bb_msgs /root/colcon_ws/src/bb_msgs
+ADD supervisord.conf /etc/supervisor/supervisord.conf
 
-RUN source /opt/ros/humble/setup.bash && \
-    source ~/vrx_ws/install/setup.bash && \
-    cd ~/colcon_ws && GZ_VERSION=garden colcon build --merge-install
+ENV USER=developer
+# add non-root user
+RUN useradd -m ${USER} && \
+    echo ${USER} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USER} && \
+    chmod 0440 /etc/sudoers.d/${USER}
+USER ${USER}
+WORKDIR /home/${USER}
 
-# COPY marker /dev/null
-ADD ros_entrypoint.sh /ros_entrypoint.sh
-RUN chmod 755 /ros_entrypoint.sh
+ENV HOME /home/${USER}
+ENV SHELL /bin/bash
+
+# COPY --from=ssh_auth /bbasv_descriptions $HOME/colcon_ws/src/bbasv_descriptions
+# COPY --from=ssh_auth /simulator $HOME/colcon_ws/src/simulator # to migrate to ros2
+# COPY --from=ssh_auth /bb_msgs $HOME/colcon_ws/src/bb_msgs
+
+# RUN source /opt/ros/humble/setup.bash && \
+#     cd ~/colcon_ws && GZ_VERSION=garden colcon build --merge-install
 
 RUN sh -c 'echo "source ~/colcon_ws/install/setup.bash" >> ~/.bashrc'
 
 ADD supervisord.conf /etc/supervisor/supervisord.conf
 
-VOLUME ["/root/colcon_ws/src/", "/home/developer/colcon_ws/src/"]
+VOLUME ["${HOME}/colcon_ws/src/"]
 
-CMD ["/usr/local/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+CMD [ "sudo", "-E", "/usr/local/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
