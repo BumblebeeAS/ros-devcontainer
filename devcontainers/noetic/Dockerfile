@@ -97,33 +97,16 @@ RUN useradd -m ${USER} && \
     echo ${USER} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USER} && \
     chmod 0440 /etc/sudoers.d/${USER}
 
-# install depending packages (install moveit! algorithms on the workspace side, since moveit-commander loads it from the workspace)
-# RUN apt-get update && apt-get upgrade -y && \
-#     apt-get install -y \
-    # ros-$ROS_DISTRO-desktop \
-    # ros-$ROS_DISTRO-moveit \
-    # ros-$ROS_DISTRO-moveit-commander
-    # ros-$ROS_DISTRO-moveit-ros-visualization
-    # ros-$ROS_DISTRO-trac-ik
-    # ros-$ROS_DISTRO-move-base-msgs
-    # ros-$ROS_DISTRO-ros-numpy && \
-    # apt-get clean
-
-# install bio_ik
-# RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
-#     mkdir -p /bio_ik_ws/src && \
-#     cd /bio_ik_ws/src && \
-#     catkin_init_workspace && \
-#     git clone --depth=1 https://github.com/TAMS-Group/bio_ik.git && \
-#     cd .. && \
-#     catkin_make install -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/ros/$ROS_DISTRO -DCATKIN_ENABLE_TESTING=0 && \
-#     cd / && rm -r /bio_ik_ws
-
 # eigen quadprog for controls
 RUN curl -1sLf \
   'https://dl.cloudsmith.io/public/mc-rtc/stable/setup.deb.sh' \
   | sudo -E bash && apt-get update && apt-get upgrade && apt-get install -y libeigen-quadprog-dev \
     && apt-get clean
+
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y \
+    ros-noetic-actionlib-tools && \
+    apt-get clean
 
 # configure services
 RUN mkdir -p /etc/supervisor/conf.d
