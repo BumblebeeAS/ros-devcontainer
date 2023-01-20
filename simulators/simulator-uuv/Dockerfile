@@ -4,7 +4,7 @@ FROM ghcr.io/ngxingyu/simulator_uuv_base:latest
 
 ADD supervisord.conf /etc/supervisor/supervisord.conf
 
-RUN apt-get install -y ros-noetic-actionlib-tools
+RUN apt-get install -y ros-noetic-actionlib-tools python3-tf-conversions
 
 ENV USER=developer
 # add non-root user
@@ -25,5 +25,3 @@ RUN sudo chown -R ${USER}:${USER} /home/${USER}
 RUN sh -c 'echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc'
 
 VOLUME ["${HOME}/catkin_ws/src/"]
-
-CMD [ "sudo", "-E", "/usr/local/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]

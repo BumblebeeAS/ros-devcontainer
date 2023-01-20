@@ -33,6 +33,12 @@ services:
       #           count: 1
       #           capabilities: [gpu]
       # runtime: nvidia
+    # command: 
+    # - /bin/sh
+    # - -c
+    # - |
+    #   /ros_entrypoint.sh roslaunch bbauv_gazebo_worlds robosub.launch vehicle:=auv4 gui:=true
+    tty: true
   workspace:
     # env_file:
     #   - .env
