@@ -16,7 +16,7 @@ RUN apt-get update --fix-missing && \
     apt fix-broken install -y || true && \
     apt-get install -y libegl1-mesa || true && apt-get clean &&\
     cd /tmp && \
-    curl -fsSL -O ${SOURCEFORGE}/virtualgl/files/${VIRTUALGL_VERSION}/virtual_gl_${VIRTUALGL_VERSION}_amd64.deb &&\
+    curl -fsSL -O ${SOURCEFORGE}/virtualgl/files/${VIRTUALGL_VERSION}/virtualgl_${VIRTUALGL_VERSION}_amd64.deb &&\
     dpkg -i *.deb && \
     rm -rf /tmp/*.deb
 
