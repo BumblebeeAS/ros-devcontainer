@@ -9,6 +9,7 @@ ARG VIRTUALGL_VERSION=3.0.2
 
 RUN apt-get update --fix-missing && \
     apt-get install -y libegl1-mesa || true && \
+    apt-get install -y libxtst6 || true && \
     apt fix-broken install -y || true && \
     apt-get install -y libegl1-mesa || true && apt-get clean &&\
     cd /tmp && \
