@@ -1,67 +1,31 @@
 version: '2.4'
 services:
-  xserver:
-    image: devrt/xserver
-    ipc: host
-    security_opt:
-      - seccomp:unconfined
-    ports:
-      - "3000:80"
-    volumes:
-      - /dev/dri:/dev/dri
-    healthcheck:
-      test: ["CMD-SHELL", "test -e /tmp/.X11-unix/X1"]
-      interval: "1s"
-      retries: 20
-  simulator:
-    image: "ngxingyu/simulator_vrx"
-    ipc: host
-    security_opt:
-      - seccomp:unconfined
-    environment:
-      - DISPLAY=:0
-    volumes_from:
-      - xserver
-    depends_on:
-      - xserver
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
-    runtime: nvidia
   workspace:
     # env_file:
     #   - .env
-    image: ngxingyu/ros-devcontainer:noetic-desktop
+    image: ghcr.io/ngxingyu/ros-devcontainer:noetic-desktop
     ipc: host
+    network_mode: host
     security_opt:
       - seccomp:unconfined
-    ports:
-      - "3001:3000"
-      - "3002:8888"
     volumes:
       - auv_workspace:/workspace # persist the devel / install folder across sessions
       - ../bbauv_ws/src:/workspace/src # bind-mount auv workspace
       # - asv_workspace:/workspace # persist the devel / install folder across sessions
       # - ../bbasv_ws/src:/workspace/src # bind-mount asv workspace
     environment:
-      - DISPLAY=:0
-      - ROS_MASTER_URI=http://simulator:11311/
-    volumes_from:
-      - xserver
-      - simulator
-    depends_on:
-      - xserver
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
+      - DISPLAY=${DISPLAY}
+      - VGL_CLIENT=${VGL_CLIENT}
+      - ROS_MASTER_URI=${ROS_MASTER_URI}
+    devices:
+      - /dev/dri:/dev/dri
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
 volumes:
   asv_workspace: # volume
   auv_workspace: # volume

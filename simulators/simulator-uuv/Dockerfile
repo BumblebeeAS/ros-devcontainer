@@ -8,6 +8,20 @@ RUN apt-get update && \
     apt-get install -y ros-noetic-actionlib-tools python3-tf-conversions && \
     apt-get clean
 
+ARG SOURCEFORGE=https://sourceforge.net/projects
+ARG VIRTUALGL_VERSION=3.0.2
+
+RUN apt-get update --fix-missing && \
+    apt-get install -y libegl1-mesa || true && \
+    apt fix-broken install -y || true && \
+    apt-get install -y libegl1-mesa || true && apt-get clean &&\
+    cd /tmp && \
+    curl -fsSL -O ${SOURCEFORGE}/virtualgl/files/${VIRTUALGL_VERSION}/virtual_gl_${VIRTUALGL_VERSION}_amd64.deb &&\
+    dpkg -i *.deb && \
+    rm -rf /tmp/*.deb
+
+USER ${USER}
+
 ENV USER=developer
 # add non-root user
 RUN useradd -m ${USER} && \
@@ -31,4 +45,4 @@ RUN source /opt/ros/noetic/setup.bash && \
 
 VOLUME ["${HOME}/catkin_ws/src/"]
 
-CMD [ "sudo", "-E", "/usr/local/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+# CMD [ "sudo", "-E", "/usr/local/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
