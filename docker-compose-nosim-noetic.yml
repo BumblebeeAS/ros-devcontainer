@@ -1,0 +1,34 @@
+version: '2.4'
+services:
+  workspace:
+    # env_file:
+    #   - .env
+    image: ghcr.io/ngxingyu/ros-devcontainer:noetic-dev
+    ipc: host
+    network_mode: host
+    security_opt:
+      - seccomp:unconfined
+    volumes:
+      - auv_workspace:/workspace # persist the devel / install folder across sessions
+      - ../bbauv_ws/src:/workspace/src # bind-mount auv workspace
+      - ../uuv_ws/src:/home/developer/uuv_ws/src # bind-mount auv workspace
+      - ~/Downloads/bags/:/bags # bagfiles
+      # - asv_workspace:/workspace # persist the devel / install folder across sessions
+      # - ../bbasv_ws/src:/workspace/src # bind-mount asv workspace
+    environment:
+      - DISPLAY=${DISPLAY}
+      - VGL_CLIENT=${VGL_CLIENT}
+      - ROS_MASTER_URI=${ROS_MASTER_URI}
+    devices:
+      - /dev/dri:/dev/dri
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+    tty: true # to keep session alive
+volumes:
+  # asv_workspace: # volume
+  auv_workspace: # volume

@@ -4,7 +4,9 @@
 #
 
 CONTAINER_ID=$1
+COMMAND=$2
 
 xhost +
-docker exec --privileged -e DISPLAY=${DISPLAY} -e LINES=`tput lines` -it ${CONTAINER_ID} bash
+[[ -n $COMMAND ]] && docker exec --privileged -e DISPLAY=${DISPLAY} -e LINES=`tput lines` -it ${CONTAINER_ID} bash -c "${COMMAND}"
+[[ -z $COMMAND ]] && docker exec --privileged -e DISPLAY=${DISPLAY} -e LINES=`tput lines` -it ${CONTAINER_ID} bash
 xhost -

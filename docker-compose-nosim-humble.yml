@@ -3,7 +3,7 @@ services:
   workspace:
     # env_file:
     #   - .env
-    image: ghcr.io/ngxingyu/ros-devcontainer:noetic-desktop
+    image: ghcr.io/ngxingyu/ros-devcontainer:humble-dev
     ipc: host
     network_mode: host
     security_opt:
@@ -11,6 +11,8 @@ services:
     volumes:
       - auv_workspace:/workspace # persist the devel / install folder across sessions
       - ../bbauv_ws/src:/workspace/src # bind-mount auv workspace
+      - ../uuv_ws/src:/home/developer/uuv_ws/src # bind-mount auv workspace
+    #   - ~/Downloads/bags/:/bags # bagfiles
       # - asv_workspace:/workspace # persist the devel / install folder across sessions
       # - ../bbasv_ws/src:/workspace/src # bind-mount asv workspace
     environment:
@@ -26,6 +28,7 @@ services:
     #         - driver: nvidia
     #           count: 1
     #           capabilities: [gpu]
+    tty: true # to keep session alive
 volumes:
-  asv_workspace: # volume
+  # asv_workspace: # volume
   auv_workspace: # volume
