@@ -1,0 +1,104 @@
+{
+    "fileTemplates.templates_dir": "/home/developer/templates",
+    "files.associations": {
+        "*.launch": "xml",
+        "*.test": "xml",
+        "*.urdf.xacro": "xml",
+        "*.urdf": "xml",
+        "model.config": "xml",
+        "*.sdf": "xml",
+        "*.world": "xml",
+        "*.repos": "yaml"
+    },
+    "xml.fileAssociations": [
+        {
+            "systemId": "/opt/xsd/package.xml/package_format2.xsd",
+            "pattern": "package.xml"
+        },
+        {
+            "systemId": "/opt/xsd/roslaunch/roslaunch.xsd",
+            "pattern": "**/*.launch"
+        },
+        {
+            "systemId": "/opt/xsd/roslaunch/roslaunch.xsd",
+            "pattern": "**/*.test"
+        },
+        {
+            "systemId": "/opt/xsd/urdf/urdf.xsd",
+            "pattern": "**/*.urdf.xacro"
+        },
+        {
+            "systemId": "/opt/xsd/urdf/urdf.xsd",
+            "pattern": "**/*.urdf"
+        },
+        {
+            "systemId": "/opt/xsd/sdf/root.xsd",
+            "pattern": "**/*.sdf"
+        },
+        {
+            "systemId": "/opt/xsd/sdf/root.xsd",
+            "pattern": "**/*.world"
+        }
+    ],
+    "python.autoComplete.extraPaths": [
+        "/opt/ros/humble/lib/python3.10/site-packages/"
+    ],
+    "python.analysis.extraPaths": [
+        "/opt/ros/humble/lib/python3.10/site-packages/",
+        "/home/developer/workspace/devel/lib/python3/dist-packages"
+    ],
+    "python.envFile": "${workspaceFolder}/.env",
+    "python.formatting.autopep8Path": "/usr/bin/autopep8",
+    "python.formatting.autopep8Args": [
+        "--max-line-length=100"
+    ],
+    "C_Cpp.default.intelliSenseMode": "linux-gcc-x86",
+    "C_Cpp.formatting": "disabled",
+    "uncrustify.configPath.linux": "/opt/ros/humble/lib/python3.10/site-packages/ament_uncrustify/configuration/ament_code_style.cfg",
+    "[cpp]": {
+        "editor.defaultFormatter": "zachflower.uncrustify"
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/*.code-search": true,
+        "**/build": true,
+        "**/install": true,
+        "**/log": true
+    },
+    "cSpell.words": [
+        "RTPS",
+        "athackst",
+        "autopep",
+        "cmake",
+        "cppcheck",
+        "cpplint",
+        "DCMAKE",
+        "deque",
+        "devcontainer",
+        "ints",
+        "noqa",
+        "pytest",
+        "rclcpp",
+        "rclpy",
+        "repos",
+        "rosdep",
+        "rosdistro",
+        "rosidl",
+        "RTPS",
+        "uncrustify",
+        "Wextra",
+        "Wpedantic",
+        "xmllint"
+    ],
+    "cSpell.allowCompoundWords": true,
+    "cSpell.ignorePaths": [
+        "**/package-lock.json",
+        "**/node_modules/**",
+        "**/vscode-extension/**",
+        "**/.git/objects/**",
+        ".vscode",
+        ".vscode-insiders",
+        ".devcontainer/devcontainer.json"
+    ]
+}

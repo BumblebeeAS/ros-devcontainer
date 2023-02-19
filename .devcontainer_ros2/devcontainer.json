@@ -1,0 +1,29 @@
+{
+	"name": "ROS devcontainer for vscode",
+	"dockerComposeFile": [
+		"../docker-compose-nosim-humble.yml"
+	],
+	"service": "workspace",
+	"workspaceFolder": "/workspace",
+	"shutdownAction": "stopCompose",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-vscode.cpptools",
+				"ms-python.python",
+				"ms-iot.vscode-ros",
+				"twxs.cmake",
+				"redhat.vscode-xml",
+				"althack.ament-task-provider",
+				"DotJoshJohnson.xml",
+				"ms-azuretools.vscode-docker",
+				"smilerobotics.urdf",
+				"streetsidesoftware.code-spell-checker",
+				"yzhang.markdown-all-in-one",
+				"zachflower.uncrustify",
+				"betwo.b2-catkin-tools"
+			],
+		}
+	}
+    //"appPort": [80],
+}

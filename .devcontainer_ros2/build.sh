@@ -1,6 +1,6 @@
 #!/bin/sh
 
-for dist in melodic noetic humble
+for dist in humble
 do
     docker pull ros:$dist
     docker build --build-arg BASE_IMAGE=ros:$dist -f Dockerfile -t ngxingyu/ros-devcontainer:$dist-desktop .

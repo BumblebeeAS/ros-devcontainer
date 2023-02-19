@@ -6,12 +6,16 @@
 	"service": "workspace",
 	"workspaceFolder": "/workspace",
 	"shutdownAction": "stopCompose",
-	"extensions": [
-		"ms-vscode.cpptools",
-		"ms-python.python",
-		"ms-iot.vscode-ros",
-		"twxs.cmake",
-		"redhat.vscode-xml"
-    ],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-vscode.cpptools",
+				"ms-python.python",
+				"ms-iot.vscode-ros",
+				"twxs.cmake",
+				"redhat.vscode-xml"
+			]
+		}
+	}
     //"appPort": [80],
 }
