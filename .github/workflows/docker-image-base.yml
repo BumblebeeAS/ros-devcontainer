@@ -28,11 +28,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - dockerfile: ./devcontainers/melodic/Dockerfile.base
-            image: ghcr.io/ngxingyu/ros-devcontainer
-            tag: |
-              ghcr.io/ngxingyu/ros-devcontainer:melodic-base
-            context: ./
+          # - dockerfile: ./devcontainers/melodic/Dockerfile.base
+          #   image: ghcr.io/ngxingyu/ros-devcontainer
+          #   tag: |
+          #     ghcr.io/ngxingyu/ros-devcontainer:melodic-base
+          #   context: ./
           - dockerfile: ./devcontainers/noetic/Dockerfile.base
             image: ghcr.io/ngxingyu/ros-devcontainer
             tag: |

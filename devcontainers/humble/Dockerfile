@@ -109,11 +109,11 @@ RUN apt-get update && apt-get install -y nano \
 
 # configure services
 RUN mkdir -p /etc/supervisor/conf.d
-COPY .devcontainer/supervisord.conf /etc/supervisor/supervisord.conf
+COPY .devcontainer_ros2/supervisord.conf /etc/supervisor/supervisord.conf
 
-COPY .devcontainer/entrypoint.sh /entrypoint.sh
+COPY .devcontainer_ros2/entrypoint.sh /entrypoint.sh
 
-COPY .devcontainer/sim.py /usr/bin/sim
+COPY .devcontainer_ros2/sim.py /usr/bin/sim
 
 COPY --from=xsdcache /opt/xsd /opt/xsd
 
@@ -154,12 +154,6 @@ ADD .vscode_ros2 /home/${USER}/.vscode
 ADD .devcontainer_ros2/compile_flags.txt /home/${USER}/compile_flags.txt
 ADD .devcontainer_ros2/templates /home/${USER}/templates
 RUN sudo chown -R ${USER}:${USER} /home/${USER}
-
-# install theia web IDE
-# COPY .devcontainer/theia-latest.package.json /home/${USER}/package.json
-# RUN yarn --cache-folder ./ycache && rm -rf ./ycache && \
-#     NODE_OPTIONS="--max_old_space_size=4096" yarn theia build && \
-#     yarn theia download:plugins
 
 # ENV THEIA_DEFAULT_PLUGINS local-dir:/home/${USER}/plugins
 

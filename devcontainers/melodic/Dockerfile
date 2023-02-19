@@ -92,11 +92,11 @@ RUN curl -1sLf \
 
 # configure services
 RUN mkdir -p /etc/supervisor/conf.d
-COPY .devcontainer/supervisord.conf /etc/supervisor/supervisord.conf
+COPY .devcontainer_ros1/supervisord.conf /etc/supervisor/supervisord.conf
 
-COPY .devcontainer/entrypoint.sh /entrypoint.sh
+COPY .devcontainer_ros1/entrypoint.sh /entrypoint.sh
 
-COPY .devcontainer/sim.py /usr/bin/sim
+COPY .devcontainer_ros1/sim.py /usr/bin/sim
 
 COPY --from=xsdcache /opt/xsd /opt/xsd
 

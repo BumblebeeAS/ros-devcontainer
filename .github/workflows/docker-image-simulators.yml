@@ -28,11 +28,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - dockerfile: ./simulators/simulator-vrx/Dockerfile
-            image: ghcr.io/ngxingyu/simulator_vrx
-            tag: |
-              ghcr.io/ngxingyu/simulator_vrx:latest
-            context: ./simulators/simulator-vrx
+          # - dockerfile: ./simulators/simulator-vrx/Dockerfile
+          #   image: ghcr.io/ngxingyu/simulator_vrx
+          #   tag: |
+          #     ghcr.io/ngxingyu/simulator_vrx:latest
+          #   context: ./simulators/simulator-vrx
           - dockerfile: ./simulators/simulator-uuv/Dockerfile
             image: ghcr.io/ngxingyu/simulator_uuv
             tag: |
