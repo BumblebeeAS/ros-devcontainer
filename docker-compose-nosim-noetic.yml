@@ -19,6 +19,7 @@ services:
       - DISPLAY=${DISPLAY}
       - VGL_CLIENT=${VGL_CLIENT}
       - ROS_MASTER_URI=${ROS_MASTER_URI}
+      - ROS_IP=${ROS_IP}
     devices:
       - /dev/dri:/dev/dri
     # deploy:

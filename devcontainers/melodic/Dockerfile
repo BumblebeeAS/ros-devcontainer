@@ -132,9 +132,9 @@ RUN git clone --depth 1 https://github.com/b4b4r07/enhancd.git ~/.enhancd && \
 RUN rosdep update
 
 # global vscode config
-ADD .vscode /home/${USER}/.vscode
-ADD .devcontainer/compile_flags.txt /home/${USER}/compile_flags.txt
-ADD .devcontainer/templates /home/${USER}/templates
+ADD .vscode_ros1 /home/${USER}/.vscode
+ADD .devcontainer_ros1/compile_flags.txt /home/${USER}/compile_flags.txt
+ADD .devcontainer_ros1/templates /home/${USER}/templates
 RUN sudo chown -R ${USER}:${USER} /home/${USER}
 
 # enter ROS world

@@ -108,6 +108,8 @@ RUN apt-get update && apt-get upgrade -y && \
     ros-noetic-actionlib-tools && \
     apt-get clean
 
+RUN pip install mcap-ros1-support 
+
 # configure services
 RUN mkdir -p /etc/supervisor/conf.d
 COPY .devcontainer/supervisord.conf /etc/supervisor/supervisord.conf
@@ -150,10 +152,10 @@ RUN git clone --depth 1 https://github.com/b4b4r07/enhancd.git ~/.enhancd && \
 RUN rosdep update
 
 # global vscode config
-ADD .vscode /home/${USER}/.vscode
+ADD .vscode_ros1 /home/${USER}/.vscode
 # ADD .vscode /home/${USER}/.theia
-ADD .devcontainer/compile_flags.txt /home/${USER}/compile_flags.txt
-ADD .devcontainer/templates /home/${USER}/templates
+ADD .devcontainer_ros1/compile_flags.txt /home/${USER}/compile_flags.txt
+ADD .devcontainer_ros1/templates /home/${USER}/templates
 RUN sudo chown -R ${USER}:${USER} /home/${USER}
 
 # install theia web IDE
