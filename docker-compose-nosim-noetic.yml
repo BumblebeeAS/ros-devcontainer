@@ -10,8 +10,9 @@ services:
       - seccomp:unconfined
     volumes:
       - auv_workspace:/workspace # persist the devel / install folder across sessions
-      - ../bbauv_ws/src:/workspace/src # bind-mount auv workspace
-      - ../uuv_ws/src:/home/developer/uuv_ws/src # bind-mount auv workspace
+      # - ../bbauv_ws/src:/workspace/src # bind-mount auv workspace
+      # - ../uuv_ws/src:/home/developer/uuv_ws/src # bind-mount auv workspace
+      - ../noetic_ws/src:/workspace/src # bind-mount auv workspace
       - ~/Downloads/bags/:/bags # bagfiles
       # - asv_workspace:/workspace # persist the devel / install folder across sessions
       # - ../bbasv_ws/src:/workspace/src # bind-mount asv workspace

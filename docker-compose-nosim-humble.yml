@@ -9,12 +9,12 @@ services:
     security_opt:
       - seccomp:unconfined
     volumes:
-      - auv_workspace:/workspace # persist the devel / install folder across sessions
-      - ../bbauv_ws/src:/workspace/src # bind-mount auv workspace
-      - ../uuv_ws/src:/home/developer/uuv_ws/src # bind-mount auv workspace
-    #   - ~/Downloads/bags/:/bags # bagfiles
-      # - asv_workspace:/workspace # persist the devel / install folder across sessions
-      # - ../bbasv_ws/src:/workspace/src # bind-mount asv workspace
+      #- auv_workspace:/workspace # persist the devel / install folder across sessions
+      #- ../bbauv_ws/src:/workspace/src # bind-mount auv workspace
+      #- ../uuv_ws/src:/home/developer/uuv_ws/src # bind-mount auv workspace
+      - ~/Downloads/bags/:/bags # bagfiles
+      - asv_workspace:/workspace # persist the devel / install folder across sessions
+      - ../bbasv_ws/src:/workspace/src # bind-mount asv workspace
     environment:
       - DISPLAY=${DISPLAY}
       - VGL_CLIENT=${VGL_CLIENT}
@@ -30,5 +30,5 @@ services:
     #           capabilities: [gpu]
     tty: true # to keep session alive
 volumes:
-  # asv_workspace: # volume
-  auv_workspace: # volume
+  asv_workspace: # volume
+  #auv_workspace: # volume

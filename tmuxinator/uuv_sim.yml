@@ -1,6 +1,6 @@
 # /home/ngxingyu/.config/tmuxinator/vrx-sim.yml
 
-name: vrx-sim
+name: uuv-sim
 root: ~/bb/ros-devcontainer/
 
 # Optional tmux socket
@@ -15,7 +15,7 @@ root: ~/bb/ros-devcontainer/
 # on_project_start: command
 
 # Run on project start, the first time
-# on_project_first_start: command
+on_project_first_start: docker compose pull
 
 # Run on project start, after the first time
 # on_project_restart: command
@@ -49,8 +49,9 @@ windows:
   - docker:      
       layout: main-vertical
       panes:
-        - vglrun -d :0 docker compose up
-        - ./join.bash ros-devcontainer-simulator-1 "/ros_entrypoint.sh ros2 launch vrx_gz competition.launch.py urdf:=bbasv3.urdf"
+        - vglrun -d :0 docker compose -f docker-compose-uuv.yml up
+        # - ./join.bash ros-devcontainer-simulator-1 "/ros_entrypoint.sh ros2 launch vrx_gz competition.launch.py urdf:=bbasv3.urdf"
+        - ./join.bash ros-devcontainer-simulator-1 "/ros_entrypoint.sh roslaunch bbauv_gazebo_worlds robosub.launch gui:=false"
   - workspace:
       layout: main-vertical
       pre:
