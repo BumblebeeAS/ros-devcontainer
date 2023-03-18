@@ -32,7 +32,7 @@ jobs:
           #   image: ghcr.io/ngxingyu/simulator_vrx_base
           #   tag: |
           #     ghcr.io/ngxingyu/simulator_vrx_base:latest
-            context: ./simulators/simulator-vrx
+          #   context: ./simulators/simulator-vrx
           - dockerfile: ./simulators/simulator-uuv/Dockerfile.base
             image: ghcr.io/ngxingyu/simulator_uuv_base
             tag: |
