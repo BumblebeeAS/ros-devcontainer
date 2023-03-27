@@ -61,8 +61,6 @@ RUN /bin/sh -c 'echo "deb http://packages.ros.org/ros/ubuntu ${RELEASE} main" > 
  && apt install -y --no-install-recommends \
     libatlas-base-dev \
     libeigen3-dev
-    libsdl-image1.2-dev \
-    libsdl2-dev \
     libgoogle-glog-dev \
     libsuitesparse-dev \    
     python-is-python3 \
