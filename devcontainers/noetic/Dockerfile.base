@@ -60,7 +60,7 @@ RUN /bin/sh -c 'echo "deb http://packages.ros.org/ros/ubuntu ${RELEASE} main" > 
  && apt update \
  && apt install -y --no-install-recommends \
     libatlas-base-dev \
-    libeigen3-dev
+    libeigen3-dev \
     libgoogle-glog-dev \
     libsuitesparse-dev \    
     python-is-python3 \
