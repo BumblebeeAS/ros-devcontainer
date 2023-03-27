@@ -108,7 +108,7 @@ RUN apt-get update && apt-get upgrade -y && \
     ros-noetic-actionlib-tools && \
     apt-get clean
 
-RUN pip install mcap-ros1-support 
+RUN pip install mcap-ros1-support transforms3d
 
 # configure services
 RUN mkdir -p /etc/supervisor/conf.d
@@ -147,6 +147,13 @@ RUN git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && \
 
 RUN git clone --depth 1 https://github.com/b4b4r07/enhancd.git ~/.enhancd && \
     echo "source ~/.enhancd/init.sh" >> ~/.bashrc
+
+
+RUN apt-get update && apt-get install -y ros-${ROS_DISTRO}-pcl-msgs \
+    ros-${ROS_DISTRO}-perception-pcl && \
+    apt-get clean
+
+RUN pip install transforms3d
 
 # init rosdep
 RUN rosdep update
