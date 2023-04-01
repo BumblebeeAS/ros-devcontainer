@@ -70,11 +70,12 @@ RUN /bin/sh -c 'echo "deb http://packages.ros.org/ros/ubuntu ${RELEASE} main" > 
     python3-rosinstall-generator \
     python3-vcstool \
     ros-${DIST}-driver-base \
+    ros-${DIST}-effort-controllers \
+    ros-${DIST}-gazebo-msgs \
+    ros-${DIST}-geographic-info \
     ros-${DIST}-image-transport \
     ros-${DIST}-image-transport-plugins \
     ros-${DIST}-image-pipeline \
-    ros-${DIST}-effort-controllers \
-    ros-${DIST}-geographic-info \
     ros-${DIST}-joint-state-controller \
     ros-${DIST}-joint-state-publisher \
     ros-${DIST}-joy \
@@ -82,10 +83,6 @@ RUN /bin/sh -c 'echo "deb http://packages.ros.org/ros/ubuntu ${RELEASE} main" > 
     ros-${DIST}-kdl-parser-py \
     ros-${DIST}-key-teleop \
     ros-${DIST}-move-base \
-    ros-${DIST}-moveit-commander \
-    ros-${DIST}-moveit-planners \
-    ros-${DIST}-moveit-simple-controller-manager \
-    ros-${DIST}-moveit-ros-visualization \
     ros-${DIST}-pcl-conversions \
     ros-${DIST}-pcl-ros \
     ros-${DIST}-perception-pcl \
