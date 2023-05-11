@@ -68,29 +68,30 @@ RUN sh -c 'echo "deb https://deb.nodesource.com/node_14.x `lsb_release -cs` main
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y \
     bash-completion \
-    less \
-    wget \
-    vim-tiny \
-    iputils-ping \
-    net-tools \
-    openssh-client \
-    git \
-    openjdk-8-jdk-headless \
-    nodejs \
-    sudo \
-    imagemagick \
     byzanz \
-    python3-dev \
+    git \
+    imagemagick \
+    iputils-ping \
+    less \
     libsecret-1-dev \
+    net-tools \
+    nodejs \
+    openssh-client \
+    openjdk-8-jdk-headless \
+    python3-dev \
+    sudo \
+    ros-noetic-actionlib-tools \
+    vim-tiny \
     xorg-dev\
+    wget \
     && npm install -g yarn \
     && apt-get clean
 
 # basic python packages
 RUN apt-get install -y python-is-python3; \
     curl -kL https://bootstrap.pypa.io/get-pip.py | python && \
-    pip install --upgrade pip && \
-    pip install --upgrade --ignore-installed --no-cache-dir pyassimp pylint==1.9.4 notebook~=5.7 Pygments matplotlib ipywidgets jupyter_contrib_nbextensions nbimporter supervisor supervisor_twiddler argcomplete
+    pip3 install --upgrade pip && \
+    pip3 install --upgrade --ignore-installed --no-cache-dir pyassimp pylint==1.9.4 notebook~=5.7 Pygments matplotlib ipywidgets jupyter_contrib_nbextensions nbimporter supervisor supervisor_twiddler argcomplete
 
 # add non-root user
 RUN useradd -m ${USER} && \
@@ -103,12 +104,13 @@ RUN curl -1sLf \
   | sudo -E bash && apt-get update && apt-get upgrade && apt-get install -y libeigen-quadprog-dev \
     && apt-get clean
 
-RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y \
-    ros-noetic-actionlib-tools && \
-    apt-get clean
+RUN pip3 install --upgrade --ignore-installed --no-cache-dir torch torchvision --extra-index-url https://download.pytorch.org/whl/cpu
 
-RUN pip install mcap-ros1-support transforms3d
+# deps for mission-planner
+RUN apt-get update && apt-get install -y qtbase5-dev libqt5svg5-dev libzmq3-dev libdw-dev ros-noetic-ros-babel-fish && apt-get clean
+RUN apt-get update && apt-get install -y ros-$ROS_DISTRO-foxglove-bridge && apt-get clean
+RUN pip3 install transforms3d
+
 
 # configure services
 RUN mkdir -p /etc/supervisor/conf.d
@@ -147,13 +149,6 @@ RUN git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && \
 
 RUN git clone --depth 1 https://github.com/b4b4r07/enhancd.git ~/.enhancd && \
     echo "source ~/.enhancd/init.sh" >> ~/.bashrc
-
-
-RUN apt-get update && apt-get install -y ros-${ROS_DISTRO}-pcl-msgs \
-    ros-${ROS_DISTRO}-perception-pcl && \
-    apt-get clean
-
-RUN pip install transforms3d
 
 # init rosdep
 RUN rosdep update

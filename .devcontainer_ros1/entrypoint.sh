@@ -14,10 +14,9 @@ sed -e 's@\$ROS_DISTRO@'"$ROS_DISTRO"'@' /home/developer/compile_flags.txt > /wo
 
 ln -sfn /workspace /home/developer/workspace
 
-source /opt/ros/$ROS_DISTRO/setup.bash
+mkdir -p /workspace/src && cd /workspace/src || true
 
-mkdir -p /workspace/src && cd /workspace/src && catkin_init_workspace || true
-
-cd /home/developer
+source "/opt/ros/$ROS_DISTRO/setup.bash" --
+[ -d "/workspace/devel/" ] && source "/workspace/devel/setup.bash" --
 
 exec $@

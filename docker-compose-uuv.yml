@@ -10,6 +10,7 @@ services:
       - DISPLAY=:0
       - VGL_CLIENT=${VGL_CLIENT}
       - ROS_MASTER_URI=${ROS_MASTER_URI}
+      - ROS_IP=${ROS_IP}
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - ~/.Xauthority:/root/.Xauthority:rw
@@ -20,19 +21,22 @@ services:
       # - ../vrx_ws/src:/home/developer/colcon_ws/src # bind-mount vrx workspace/
     devices:
       - /dev/dri:/dev/dri
-      # deploy:
-      #   resources:
-      #     reservations:
-      #       devices:
-      #         - driver: nvidia
-      #           count: 1
-      #           capabilities: [gpu]
-      # runtime: nvidia    
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+    # runtime: nvidia    
     tty: true # to keep session alive
   workspace:
     # env_file:
     #   - .env
-    image: ghcr.io/ngxingyu/ros-devcontainer:noetic-dev
+    build:
+      context: ./
+      dockerfile: ./devcontainers/noetic/Dockerfile
+    #image: ghcr.io/ngxingyu/ros-devcontainer:noetic-dev
     ipc: host
     network_mode: host
     security_opt:
@@ -49,6 +53,7 @@ services:
       - DISPLAY=${DISPLAY}
       - VGL_CLIENT=${VGL_CLIENT}
       - ROS_MASTER_URI=${ROS_MASTER_URI}
+      - ROS_IP=${ROS_IP}
     devices:
       - /dev/dri:/dev/dri
     volumes_from:
