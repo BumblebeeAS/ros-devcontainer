@@ -29,14 +29,14 @@ jobs:
       matrix:
         include:
           - dockerfile: ./devcontainers/noetic/Dockerfile
-            image: ghcr.io/ngxingyu/ros-devcontainer
+            image: ghcr.io/bumblebeeas/ros-devcontainer
             tag: |
-              ghcr.io/ngxingyu/ros-devcontainer:noetic-dev
+              ghcr.io/bumblebeeas/ros-devcontainer:noetic-dev
             context: ./
           - dockerfile: ./devcontainers/humble/Dockerfile
-            image: ghcr.io/ngxingyu/ros-devcontainer
+            image: ghcr.io/bumblebeeas/ros-devcontainer
             tag: |
-              ghcr.io/ngxingyu/ros-devcontainer:humble-dev
+              ghcr.io/bumblebeeas/ros-devcontainer:humble-dev
             context: ./
 
     permissions:

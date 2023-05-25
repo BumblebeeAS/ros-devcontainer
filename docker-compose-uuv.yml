@@ -1,13 +1,13 @@
 version: '2.4'
 services:
   simulator:
-    image: ghcr.io/ngxingyu/simulator_uuv
+    image: ghcr.io/bumblebeeas/simulator_uuv
     ipc: host
     network_mode: host
     security_opt:
       - seccomp:unconfined
     environment:
-      - DISPLAY=:0
+      - DISPLAY=${DISPLAY}
       - VGL_CLIENT=${VGL_CLIENT}
       - ROS_MASTER_URI=${ROS_MASTER_URI}
       - ROS_IP=${ROS_IP}

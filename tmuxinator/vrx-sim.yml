@@ -49,7 +49,7 @@ windows:
   - docker:      
       layout: main-vertical
       panes:
-        - vglrun -d :0 docker compose up
+        - vglrun -d :0 docker compose -f docker-compose-vrx.yml up
         - ./join.bash ros-devcontainer-simulator-1 "/ros_entrypoint.sh ros2 launch vrx_gz competition.launch.py urdf:=bbasv3.urdf"
   - workspace:
       layout: main-vertical

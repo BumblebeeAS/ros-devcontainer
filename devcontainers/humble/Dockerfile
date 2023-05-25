@@ -1,5 +1,4 @@
-# ARG BASE_IMAGE=ghcr.io/ngxingyu/dockwater:humble
-ARG BASE_IMAGE=ghcr.io/ngxingyu/ros-devcontainer:humble-base
+ARG BASE_IMAGE=ghcr.io/bumblebeeas/ros-devcontainer:humble-base
 
 FROM maven:3.8.6-openjdk-18 AS xsdcache
 
@@ -82,6 +81,7 @@ RUN useradd -m ${USER} && \
 # install depending packages (install moveit! algorithms on the workspace side, since moveit-commander loads it from the workspace)
 RUN apt-get update && apt-get install -y nano \
     python3-pydantic \
+    ros-$ROS_DISTRO-actuator-msgs \
     ros-$ROS_DISTRO-joint-state-publisher \
     ros-$ROS_DISTRO-robot-localization \
     ros-$ROS_DISTRO-plotjuggler-ros \
@@ -154,8 +154,6 @@ ADD .vscode_ros2 /home/${USER}/.vscode
 ADD .devcontainer_ros2/compile_flags.txt /home/${USER}/compile_flags.txt
 ADD .devcontainer_ros2/templates /home/${USER}/templates
 RUN sudo chown -R ${USER}:${USER} /home/${USER}
-
-# ENV THEIA_DEFAULT_PLUGINS local-dir:/home/${USER}/plugins
 
 # enter ROS world
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc

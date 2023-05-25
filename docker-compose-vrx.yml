@@ -1,34 +1,26 @@
 version: '2.4'
 services:
-  xserver:
-    image: devrt/xserver
-    ipc: host
-    security_opt:
-      - seccomp:unconfined
-    ports:
-      - "3000:80"
-    volumes:
-      - /dev/dri:/dev/dri
-    healthcheck:
-      test: ["CMD-SHELL", "test -e /tmp/.X11-unix/X1"]
-      interval: "1s"
-      retries: 20
   simulator:
-    image: ghcr.io/ngxingyu/simulator_vrx_gazebosim
+    image: ghcr.io/bumblebeeas/simulator_vrx_gazebosim
     ipc: host
     security_opt:
       - seccomp:unconfined
     environment:
-      - DISPLAY=:0
+      - DISPLAY=${DISPLAY}
+      - VGL_CLIENT=${VGL_CLIENT}
     volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ~/.Xauthority:/root/.Xauthority:rw
       # - simulator_workspace:/home/developer/catkin_ws/ # persist the devel / install folder across sessions
       # - ../uuv_ws/src:/home/developer/catkin_ws/src
       - vrx_simulator_workspace:/home/developer/colcon_ws/ # persist the devel / install folder across sessions
       - ../vrx_ws/src:/home/developer/colcon_ws/src # bind-mount vrx workspace/
-    volumes_from:
-      - xserver
-    depends_on:
-      - xserver
+    devices:
+      - /dev/dri:/dev/dri
+    # volumes_from:
+    #   - xserver
+    # depends_on:
+      # - xserver
       # deploy:
       #   resources:
       #     reservations:
@@ -52,26 +44,29 @@ services:
   workspace:
     # env_file:
     #   - .env
-    image: ghcr.io/ngxingyu/ros-devcontainer:noetic-dev
+    build:
+      context: ./
+      dockerfile: ./devcontainers/humble/Dockerfile
     ipc: host
     security_opt:
       - seccomp:unconfined
-    ports:
-      - "3001:3000"
-      - "3002:8888"
+    # ports:
+    #   - "3001:3000"
+    #   - "3002:8888"
     volumes:
       # - auv_workspace:/workspace # persist the devel / install folder across sessions
       # - ../bbauv_ws/src:/workspace/src # bind-mount auv workspace/src folder
       - asv_workspace:/workspace # persist the devel / install folder across sessions
       - ../bbasv_ws/src:/workspace/src # bind-mount asv workspace/src folder
     environment:
-      - DISPLAY=:0
-      - ROS_MASTER_URI=http://simulator:11311/
+      - DISPLAY=${DISPLAY}
+      - VGL_CLIENT=${VGL_CLIENT}
+    devices:
+      - /dev/dri:/dev/dri      
     volumes_from:
-      - xserver
       - simulator
-    depends_on:
-      - xserver
+    # depends_on:
+    #   - xserver
       # deploy:
       #   resources:
       #     reservations:

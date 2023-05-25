@@ -51,7 +51,7 @@ windows:
       panes:
         - vglrun -d :0 docker compose -f docker-compose-uuv.yml up
         # - ./join.bash ros-devcontainer-simulator-1 "/ros_entrypoint.sh ros2 launch vrx_gz competition.launch.py urdf:=bbasv3.urdf"
-        - ./join.bash ros-devcontainer-simulator-1 "/ros_entrypoint.sh roslaunch bbauv_gazebo_worlds robosub.launch gui:=true use_gt_odom:=true"
+        - ./join.bash ros-devcontainer-simulator-1 "/ros_entrypoint.sh roslaunch bbauv_gazebo_worlds robosub.launch gui:=true use_gt_odom:=true x:=35.115090 y:=-6.133416 z:=-3.582284 yaw:=0.535972"
   - workspace:
       layout: tiled
       # pre:

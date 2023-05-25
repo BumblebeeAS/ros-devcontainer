@@ -29,19 +29,19 @@ jobs:
       matrix:
         include:
           # - dockerfile: ./simulators/simulator-vrx/Dockerfile.base
-          #   image: ghcr.io/ngxingyu/simulator_vrx_base
+          #   image: ghcr.io/bumblebeeas/simulator_vrx_base
           #   tag: |
-          #     ghcr.io/ngxingyu/simulator_vrx_base:latest
+          #     ghcr.io/bumblebeeas/simulator_vrx_base:latest
           #   context: ./simulators/simulator-vrx
           - dockerfile: ./simulators/simulator-uuv/Dockerfile.base
-            image: ghcr.io/ngxingyu/simulator_uuv_base
+            image: ghcr.io/bumblebeeas/simulator_uuv_base
             tag: |
-              ghcr.io/ngxingyu/simulator_uuv_base:latest
+              ghcr.io/bumblebeeas/simulator_uuv_base:latest
             context: ./simulators/simulator-uuv
           - dockerfile: ./simulators/simulator-vrx-gazebosim/Dockerfile.base
-            image: ghcr.io/ngxingyu/simulator_vrx_gazebosim_base
+            image: ghcr.io/bumblebeeas/simulator_vrx_gazebosim_base
             tag: |
-              ghcr.io/ngxingyu/simulator_vrx_gazebosim_base:latest
+              ghcr.io/bumblebeeas/simulator_vrx_gazebosim_base:latest
             context: ./simulators/simulator-vrx-gazebosim
 
     permissions:

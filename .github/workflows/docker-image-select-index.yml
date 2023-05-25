@@ -31,9 +31,9 @@ jobs:
       matrix:
         include:
           - dockerfile: ./select-index/Dockerfile
-            image: ghcr.io/ngxingyu/select-index
+            image: ghcr.io/bumblebeeas/select-index
             tag: |
-              ghcr.io/ngxingyu/select-index:latest
+              ghcr.io/bumblebeeas/select-index:latest
             context: ./select-index/
 
     permissions:

@@ -3,7 +3,7 @@ services:
   workspace:
     # env_file:
     #   - .env
-    image: ghcr.io/ngxingyu/ros-devcontainer:humble-dev
+    image: ghcr.io/bumblebeeas/ros-devcontainer:humble-dev
     ipc: host
     network_mode: host
     security_opt:

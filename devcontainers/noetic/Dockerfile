@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=ghcr.io/ngxingyu/ros-devcontainer:noetic-base
+ARG BASE_IMAGE=ghcr.io/bumblebeeas/ros-devcontainer:noetic-base
 # ARG BASE_IMAGE=ros-devcontainer:noetic-base
 
 FROM maven:3.8.6-openjdk-18 AS xsdcache

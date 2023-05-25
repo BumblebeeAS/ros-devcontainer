@@ -29,19 +29,19 @@ jobs:
       matrix:
         include:
           # - dockerfile: ./devcontainers/melodic/Dockerfile.base
-          #   image: ghcr.io/ngxingyu/ros-devcontainer
+          #   image: ghcr.io/bumblebeeas/ros-devcontainer
           #   tag: |
-          #     ghcr.io/ngxingyu/ros-devcontainer:melodic-base
+          #     ghcr.io/bumblebeeas/ros-devcontainer:melodic-base
           #   context: ./
           - dockerfile: ./devcontainers/noetic/Dockerfile.base
-            image: ghcr.io/ngxingyu/ros-devcontainer
+            image: ghcr.io/bumblebeeas/ros-devcontainer
             tag: |
-              ghcr.io/ngxingyu/ros-devcontainer:noetic-base
+              ghcr.io/bumblebeeas/ros-devcontainer:noetic-base
             context: ./
           - dockerfile: ./devcontainers/humble/Dockerfile.base
-            image: ghcr.io/ngxingyu/ros-devcontainer
+            image: ghcr.io/bumblebeeas/ros-devcontainer
             tag: |
-              ghcr.io/ngxingyu/ros-devcontainer:humble-base
+              ghcr.io/bumblebeeas/ros-devcontainer:humble-base
             context: ./
 
     permissions:

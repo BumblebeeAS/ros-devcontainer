@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:experimental
 
-FROM ghcr.io/ngxingyu/simulator_vrx_gazebosim_base:latest
+FROM ghcr.io/bumblebeeas/simulator_vrx_gazebosim_base:latest
 
 ADD supervisord.conf /etc/supervisor/supervisord.conf
 
