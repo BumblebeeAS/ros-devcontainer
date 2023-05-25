@@ -81,7 +81,6 @@ RUN useradd -m ${USER} && \
 # install depending packages (install moveit! algorithms on the workspace side, since moveit-commander loads it from the workspace)
 RUN apt-get update && apt-get install -y nano \
     python3-pydantic \
-    ros-$ROS_DISTRO-actuator-msgs \
     ros-$ROS_DISTRO-joint-state-publisher \
     ros-$ROS_DISTRO-robot-localization \
     ros-$ROS_DISTRO-plotjuggler-ros \
