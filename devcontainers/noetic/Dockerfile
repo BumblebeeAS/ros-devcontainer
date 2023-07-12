@@ -91,7 +91,7 @@ RUN apt-get update && apt-get upgrade -y && \
 RUN apt-get install -y python-is-python3; \
     curl -kL https://bootstrap.pypa.io/get-pip.py | python && \
     pip3 install --upgrade pip && \
-    pip3 install --upgrade --ignore-installed --no-cache-dir pyassimp pylint==1.9.4 notebook~=5.7 Pygments matplotlib ipywidgets jupyter_contrib_nbextensions nbimporter supervisor supervisor_twiddler argcomplete
+    pip3 install --upgrade --ignore-installed --no-cache-dir pyassimp pylint==1.9.4 notebook~=5.7 Pygments matplotlib nbimporter supervisor supervisor_twiddler argcomplete
 
 # add non-root user
 RUN useradd -m ${USER} && \
@@ -101,15 +101,17 @@ RUN useradd -m ${USER} && \
 # eigen quadprog for controls
 RUN curl -1sLf \
   'https://dl.cloudsmith.io/public/mc-rtc/stable/setup.deb.sh' \
-  | sudo -E bash && apt-get update && apt-get upgrade && apt-get install -y libeigen-quadprog-dev \
+  | sudo -E bash && apt-get update && apt-get -y upgrade && apt-get install -y libeigen-quadprog-dev \
     && apt-get clean
 
 RUN pip3 install --upgrade --ignore-installed --no-cache-dir torch torchvision --extra-index-url https://download.pytorch.org/whl/cpu
 
 # deps for mission-planner
-RUN apt-get update && apt-get install -y qtbase5-dev libqt5svg5-dev libzmq3-dev libdw-dev ros-noetic-ros-babel-fish && apt-get clean
-RUN apt-get update && apt-get install -y ros-$ROS_DISTRO-foxglove-bridge && apt-get clean
-RUN pip3 install transforms3d
+RUN apt-get update && apt-get install -y qtbase5-dev libqt5svg5-dev libzmq3-dev libdw-dev ros-noetic-ros-babel-fish \
+ros-$ROS_DISTRO-foxglove-bridge \
+ros-$ROS_DISTRO-map-server \
+ros-$ROS_DISTRO-rosmon && apt-get clean
+RUN pip3 install transforms3d ultralytics pandas numpy==1.21 opencv-python motrackers
 
 
 # configure services

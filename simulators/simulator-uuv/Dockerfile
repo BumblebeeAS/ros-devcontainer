@@ -2,7 +2,7 @@
 
 FROM ghcr.io/bumblebeeas/simulator_uuv_base:latest
 
-ADD supervisord.conf /etc/supervisor/supervisord.conf
+ADD .devcontainer_ros1/supervisord.conf /etc/supervisor/supervisord.conf
 
 RUN apt-get update && \
     apt-get install -y ros-noetic-actionlib-tools python3-tf-conversions && \
@@ -19,6 +19,10 @@ RUN apt-get update --fix-missing && \
     curl -fsSL -O ${SOURCEFORGE}/virtualgl/files/${VIRTUALGL_VERSION}/virtualgl_${VIRTUALGL_VERSION}_amd64.deb &&\
     dpkg -i *.deb && \
     rm -rf /tmp/*.deb
+
+RUN pip3 install --no-cache-dir transforms3d
+RUN apt-get update && apt-get install -y ros-${ROS_DISTRO}-hector-gazebo-plugins\
+    ros-${ROS_DISTRO}-fcl && apt-get clean
 
 USER ${USER}
 
