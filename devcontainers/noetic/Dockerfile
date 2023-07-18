@@ -107,11 +107,13 @@ RUN curl -1sLf \
 RUN pip3 install --upgrade --ignore-installed --no-cache-dir torch torchvision --extra-index-url https://download.pytorch.org/whl/cpu
 
 # deps for mission-planner
+RUN pip3 install transforms3d ultralytics pandas numpy==1.21 opencv-python motrackers gtsam shapely scikit-learn
 RUN apt-get update && apt-get install -y qtbase5-dev libqt5svg5-dev libzmq3-dev libdw-dev ros-noetic-ros-babel-fish \
 ros-$ROS_DISTRO-foxglove-bridge \
 ros-$ROS_DISTRO-map-server \
-ros-$ROS_DISTRO-rosmon && apt-get clean
-RUN pip3 install transforms3d ultralytics pandas numpy==1.21 opencv-python motrackers
+ros-$ROS_DISTRO-rosmon \
+ros-$ROS_DISTRO-pybind11-catkin ros-$ROS_DISTRO-ros-numpy\
+&& apt-get clean
 
 
 # configure services

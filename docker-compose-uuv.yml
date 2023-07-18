@@ -1,7 +1,10 @@
 version: '2.4'
 services:
   simulator:
-    image: ghcr.io/bumblebeeas/simulator_uuv
+    # image: ghcr.io/bumblebeeas/simulator_uuv
+    build:
+      context: ./
+      dockerfile: ./simulators/simulator-uuv/Dockerfile
     ipc: host
     network_mode: host
     security_opt:
