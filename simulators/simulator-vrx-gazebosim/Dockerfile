@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:experimental
 
-FROM ghcr.io/bumblebeeas/simulator_vrx_gazebosim_base:latest
-# FROM ros-devcontainer:simulator_vrx_gazebosim_base
+# FROM ghcr.io/bumblebeeas/simulator_vrx_gazebosim_base:latest
+FROM ros-devcontainer:simulator_vrx_gazebosim_base
 
 ADD .devcontainer_ros2/supervisord.conf /etc/supervisor/supervisord.conf
 
@@ -86,8 +86,8 @@ RUN apt-get update && apt-get install -y nano ccache \
 
 # eigen quadprog for controls
 RUN curl -1sLf \
-  'https://dl.cloudsmith.io/public/mc-rtc/stable/setup.deb.sh' \
-  | sudo -E bash && apt-get update && apt-get -y upgrade && apt-get install -y libeigen-quadprog-dev \
+    'https://dl.cloudsmith.io/public/mc-rtc/stable/setup.deb.sh' \
+    | sudo -E bash && apt-get update && apt-get -y upgrade && apt-get install -y libeigen-quadprog-dev \
     && apt-get clean
 
 USER ${USER}

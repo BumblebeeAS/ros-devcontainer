@@ -1,10 +1,10 @@
 version: '2.4'
 services:
   simulator:
-    image: ghcr.io/bumblebeeas/simulator_vrx_gazebosim
-    # build:
-    #   context: ./
-    #   dockerfile: ./simulators/simulator-vrx-gazebosim/Dockerfile
+    # image: ghcr.io/bumblebeeas/simulator_vrx_gazebosim
+    build:
+      context: ./
+      dockerfile: ./simulators/simulator-vrx-gazebosim/Dockerfile
     ipc: host
     network_mode: host
     security_opt:
@@ -21,29 +21,29 @@ services:
       - ../vrx_ws/src:/home/developer/colcon_ws/src # bind-mount vrx workspace/
     devices:
       - /dev/dri:/dev/dri
-    # volumes_from:
-    #   - xserver
-    # depends_on:
+      # volumes_from:
+      #   - xserver
+      # depends_on:
       # - xserver
-      # deploy:
-      #   resources:
-      #     reservations:
-      #       devices:
-      #         - driver: nvidia
-      #           count: 1
-      #           capabilities: [gpu]
-      # runtime: nvidia
-    ## specify a command to run in the container
-    # command:
-    #   - /bin/sh
-    #   - -c
-    #   - |
-    #     /ros_entrypoint.sh roslaunch bbauv_gazebo_worlds robosub.launch vehicle:=auv4 gui:=true
-    # command:  # vrx
-    # - /bin/sh
-    # - -c
-    # - |
-    #   sudo -E /ros_entrypoint.sh ros2 launch vrx_gz competition.launch.py world:=sydney_regatta urdf:=$(ros2 pkg prefix --share bbasv_description)/urdf/bbasv3.urdf
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+    runtime: nvidia
+      ## specify a command to run in the container
+      # command:
+      #   - /bin/sh
+      #   - -c
+      #   - |
+      #     /ros_entrypoint.sh roslaunch bbauv_gazebo_worlds robosub.launch vehicle:=auv4 gui:=true
+      # command:  # vrx
+      # - /bin/sh
+      # - -c
+      # - |
+      #   sudo -E /ros_entrypoint.sh ros2 launch vrx_gz competition.launch.py world:=sydney_regatta urdf:=$(ros2 pkg prefix --share bbasv_description)/urdf/bbasv3.urdf
     tty: true # to keep session alive
   # workspace:
   #   # env_file:
@@ -78,9 +78,10 @@ services:
   #     #         - driver: nvidia
   #     #           count: 1
   #     #           capabilities: [gpu]
-volumes: # docker volumes to persist build/devel across containers
+volumes:
+  # docker volumes to persist build/devel across containers
   vrx_simulator_workspace:
-  # simulator_workspace:
-  #lrauv_simulator_workspace:
-  # asv_workspace:
-  # auv_workspace:
+    # simulator_workspace:
+    #lrauv_simulator_workspace:
+    # asv_workspace:
+    # auv_workspace:

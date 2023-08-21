@@ -1,7 +1,7 @@
-# /home/ngxingyu/.config/tmuxinator/vrx-sim.yml
+# /home/saber/.config/tmuxinator/vrx-sim.yml
 
 name: vrx-sim
-root: ~/bb/ros-devcontainer/
+root: ~/ros-devcontainer/
 
 # Optional tmux socket
 # socket_name: foo
@@ -50,11 +50,13 @@ windows:
       layout: main-vertical
       panes:
         - vglrun -d :0 docker compose -f docker-compose-vrx.yml up
-        - ./join.bash ros-devcontainer-simulator-1 "/ros_entrypoint.sh ros2 launch vrx_gz competition.launch.py urdf:=bbasv3.urdf"
+        # - ./join.bash ros-devcontainer-simulator-1 "/ros_entrypoint.sh ros2 launch vrx_gz competition.launch.py world:=sydney_regatta urdf:=$(ros2 pkg prefix --share bbasv4_description)/urdf/bbasv4_full_holonomic_urdf.urdf headless:=true"
+        - ./join.bash ros-devcontainer-simulator-1 "/ros_entrypoint.sh ros2 launch vrx_gz competition.launch.py world:=stationkeeping_task urdf:=$(ros2 pkg prefix --share bbasv4_description)/urdf/bbasv4_full_holonomic_urdf.urdf headless:=true"
+        
   - workspace:
       layout: main-vertical
       pre:
-        - ./join.bash ros-devcontainer-workspace-1
+        - ./join.bash ros-devcontainer-simulator-1
       # Synchronize all panes of this window, can be enabled before or after the pane commands run.
       # 'before' represents legacy functionality and will be deprecated in a future release, in favour of 'after'
       # synchronize: after
