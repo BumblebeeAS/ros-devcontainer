@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# docker build ./xserver -f ./xserver/Dockerfile -t ngxingyu/xserver
 # sudo docker build ./select-index -f ./select-index/Dockerfile -t select-index
 
 ## base ros images used by devcontainer and base simulator images

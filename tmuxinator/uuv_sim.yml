@@ -51,19 +51,21 @@ windows:
       panes:
         - vglrun -d :0 docker compose -f docker-compose-uuv.yml up
         # - ./join.bash ros-devcontainer-simulator-1 "/ros_entrypoint.sh ros2 launch vrx_gz competition.launch.py urdf:=bbasv3.urdf"
-        - ./join.bash ros-devcontainer-simulator-1 "/ros_entrypoint.sh roslaunch bbauv_gazebo_worlds robosub.launch gui:=true use_gt_odom:=true x:=35.115090 y:=-6.133416 z:=-3.582284 yaw:=0.535972"
+        - ./join.bash ros-devcontainer-simulator-1 "/ros_entrypoint.sh roslaunch bbauv_gazebo_worlds sauvc_2024.launch gui:=false use_gt_odom:=false"
   - workspace:
       layout: tiled
+      pre:
+        - sleep 2s
       # pre:
       #   - ./join.bash ros-devcontainer-workspace-1
       # Synchronize all panes of this window, can be enabled before or after the pane commands run.
       # 'before' represents legacy functionality and will be deprecated in a future release, in favour of 'after'
       # synchronize: after
       panes:
-        - ./join.bash ros-devcontainer-workspace-1 "/entrypoint.sh roslaunch controls bbauv4.launch --wait"
+        - ./join.bash ros-devcontainer-workspace-1 "/entrypoint.sh mon launch /workspace/src/bbauv4.launch"
+        - ./join.bash ros-devcontainer-workspace-1 "/entrypoint.sh rosrun auv_localization controls_interface_action_server.py"
+        - ./join.bash ros-devcontainer-workspace-1 "/entrypoint.sh roslaunch auv_localization auv4_localization.launch --wait"
+        - ./join.bash ros-devcontainer-workspace-1 "/entrypoint.sh rviz -d /workspace/src/auv4.rviz"
         # - ./join.bash ros-devcontainer-workspace-1 "/entrypoint.sh roslaunch controlkit controlkit.launch ns:=auv4 --wait"
-        - ./join.bash ros-devcontainer-workspace-1 "/entrypoint.sh rosrun auv_localization controls_interface_action_server.py --wait"
-        - ./join.bash ros-devcontainer-workspace-1 "/entrypoint.sh roslaunch behavior_tree mission_planner.launch ns:=auv4 --wait"
-        # - ./join.bash ros-devcontainer-workspace-1 "/entrypoint.sh roslaunch auv_localization auv4_localization.launch --wait"
         # - ./join.bash ros-devcontainer-workspace-1 "/entrypoint.sh rosrun simulation_utils publish_gt_detected_objects.py"
         # - ./join.bash ros-devcontainer-workspace-1 "/entrypoint.sh rosrun simulation_utils random_model_motion.py"
