@@ -14,6 +14,7 @@ services:
       # - ../uuv_ws/src:/home/developer/uuv_ws/src # bind-mount auv workspace
       #- ../noetic_ws/src:/workspace/src # bind-mount auv workspace
       - ~/Downloads/bags/:/bags # bagfiles
+      - ~/data/datasets/:/datasets # bagfiles
       # - asv_workspace:/workspace # persist the devel / install folder across sessions
       # - ../bbasv_ws/src:/workspace/src # bind-mount asv workspace
     environment:
