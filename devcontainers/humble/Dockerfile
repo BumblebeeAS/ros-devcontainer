@@ -1,4 +1,6 @@
 ARG BASE_IMAGE=ghcr.io/bumblebeeas/ros-devcontainer:humble-base
+# If you want to use the locally built image
+# ARG BASE_IMAGE=ros-devcontainer:humble-base
 
 FROM maven:3.8.6-openjdk-18 AS xsdcache
 
@@ -43,9 +45,9 @@ RUN rm /etc/apt/apt.conf.d/docker-clean
 # Setup locale
 ENV LC_ALL=C
 RUN apt update && sudo apt install locales \
-  && locale-gen en_US en_US.UTF-8 \
-  && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 \
-  && apt-get clean -qq
+    && locale-gen en_US en_US.UTF-8 \
+    && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 \
+    && apt-get clean -qq
 
 RUN apt-get update && \
     apt-get install -y curl apt-transport-https ca-certificates software-properties-common && add-apt-repository universe && \
