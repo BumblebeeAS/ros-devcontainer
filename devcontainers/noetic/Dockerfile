@@ -164,8 +164,6 @@ ADD .devcontainer_ros1/compile_flags.txt /home/${USER}/compile_flags.txt
 ADD .devcontainer_ros1/templates /home/${USER}/templates
 RUN sudo chown -R ${USER}:${USER} /home/${USER}
 
-RUN wget https://s3.us-west-1.amazonaws.com/download.behaviortree.dev/groot2_linux_installer/Groot2-v1.5.2-x86_64.AppImage -O /home/${USER}/Groot2-v1.5.2-x86_64.AppImage && chmod +x /home/${USER}/Groot2-v1.5.2-x86_64.AppImage && /home/${USER}/Groot2-v1.5.2-x86_64.AppImage --appimage-extract && mv /home/${USER}/squashfs-root /home/${USER}/Groot2
-
 # enter ROS world
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash && source ~/workspace/devel/setup.bash" >> ~/.bashrc
 
