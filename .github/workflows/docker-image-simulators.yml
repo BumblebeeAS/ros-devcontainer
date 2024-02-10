@@ -37,12 +37,12 @@ jobs:
             image: ghcr.io/bumblebeeas/simulator_uuv
             tag: |
               ghcr.io/bumblebeeas/simulator_uuv:latest
-            context: ./simulators/simulator-uuv
+            context: ./
           - dockerfile: ./simulators/simulator-vrx-gazebosim/Dockerfile
             image: ghcr.io/bumblebeeas/simulator_vrx_gazebosim
             tag: |
               ghcr.io/bumblebeeas/simulator_vrx_gazebosim:latest
-            context: ./simulators/simulator-vrx-gazebosim
+            context: ./
 
     permissions:
       contents: read
