@@ -15,7 +15,7 @@ root: ~/bb/ros-devcontainer/
 # on_project_start: command
 
 # Run on project start, the first time
-on_project_first_start: docker compose pull
+on_project_first_start: docker compose -f docker-compose-uuv.yml pull
 
 # Run on project start, after the first time
 # on_project_restart: command
@@ -24,7 +24,7 @@ on_project_first_start: docker compose pull
 # on_project_exit: command
 
 # Run on project stop
-on_project_stop: docker compose down
+on_project_stop: docker compose -f docker-compose-uuv.yml down
 
 # Runs in each window and pane before window/pane specific commands. Useful for setting up interpreter versions.
 # pre_window: rbenv shell 2.0.0-p247
@@ -50,20 +50,20 @@ windows:
       layout: tiled
       panes:
         - vglrun -d :0 docker compose -f docker-compose-uuv.yml up
+        - sleep 1s; ./join.bash ros-devcontainer-simulator-1 "/ros_entrypoint.sh roscore"
         # - ./join.bash ros-devcontainer-simulator-1 "/ros_entrypoint.sh ros2 launch vrx_gz competition.launch.py urdf:=bbasv3.urdf"
-        - ./join.bash ros-devcontainer-simulator-1 "/ros_entrypoint.sh roslaunch bbauv_gazebo_worlds sauvc_2024.launch gui:=false use_gt_odom:=false"
   - workspace:
       layout: tiled
       pre:
-        - sleep 2s
+        - sleep 4s
       # pre:
       #   - ./join.bash ros-devcontainer-workspace-1
       # Synchronize all panes of this window, can be enabled before or after the pane commands run.
       # 'before' represents legacy functionality and will be deprecated in a future release, in favour of 'after'
       # synchronize: after
       panes:
-        - ./join.bash ros-devcontainer-workspace-1 "/entrypoint.sh mon launch /workspace/src/bbauv4.launch"
-        - ./join.bash ros-devcontainer-workspace-1 "/entrypoint.sh rosrun auv_localization controls_interface_action_server.py"
+        - ./join.bash ros-devcontainer-simulator-1 "/ros_entrypoint.sh roslaunch bbauv_gazebo_worlds sauvc_2024.launch gui:=false use_gt_odom:=false x:=-24.2 y:=-8.5 z:=0 --wait"
+        - ./join.bash ros-devcontainer-workspace-1 "/entrypoint.sh rosrun rosmon rosmon /workspace/src/bbauv4.launch"
         - ./join.bash ros-devcontainer-workspace-1 "/entrypoint.sh roslaunch auv_localization auv4_localization.launch --wait"
         - ./join.bash ros-devcontainer-workspace-1 "/entrypoint.sh rviz -d /workspace/src/auv4.rviz"
         # - ./join.bash ros-devcontainer-workspace-1 "/entrypoint.sh roslaunch controlkit controlkit.launch ns:=auv4 --wait"

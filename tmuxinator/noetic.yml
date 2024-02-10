@@ -15,7 +15,7 @@ root: ~/bb/ros-devcontainer/
 # on_project_start: docker compose pull
 
 # Run on project start, the first time
-on_project_first_start: docker compose pull
+on_project_first_start: docker compose -f docker-compose-nosim-noetic.yml pull
 
 # Run on project start, after the first time
 # on_project_restart: command
@@ -24,7 +24,7 @@ on_project_first_start: docker compose pull
 # on_project_exit: command
 
 # Run on project stop
-on_project_stop: docker compose down
+on_project_stop: docker compose -f docker-compose-nosim-noetic.yml down
 
 # Runs in each window and pane before window/pane specific commands. Useful for setting up interpreter versions.
 # pre_window: rbenv shell 2.0.0-p247
@@ -50,7 +50,7 @@ windows:
       layout: main-vertical
       panes:
         - vglrun -d :0 docker compose -f docker-compose-nosim-noetic.yml up
-        - ./join.bash ros-devcontainer-workspace-1 "/ros_entrypoint.sh roscore"
+        # - ./join.bash ros-devcontainer-workspace-1 "/ros_entrypoint.sh roscore"
   - workspace:
       layout: main-vertical
       pre:

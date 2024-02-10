@@ -1,10 +1,10 @@
 version: '2.4'
 services:
   simulator:
-    # image: ghcr.io/bumblebeeas/simulator_uuv
-    build:
-      context: ./
-      dockerfile: ./simulators/simulator-uuv/Dockerfile
+    image: ghcr.io/bumblebeeas/simulator_uuv
+    # build:
+    #   context: ./
+    #   dockerfile: ./simulators/simulator-uuv/Dockerfile
     ipc: host
     network_mode: host
     security_opt:
@@ -36,10 +36,10 @@ services:
   workspace:
     # env_file:
     #   - .env
-    build:
-      context: ./
-      dockerfile: ./devcontainers/noetic/Dockerfile
-    #image: ghcr.io/ngxingyu/ros-devcontainer:noetic-dev
+    # build:
+    #   context: ./
+    #   dockerfile: ./devcontainers/noetic/Dockerfile
+    image: ghcr.io/bumblebeeas/ros-devcontainer:noetic-dev
     ipc: host
     network_mode: host
     security_opt:

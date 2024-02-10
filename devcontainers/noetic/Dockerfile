@@ -69,6 +69,7 @@ RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y \
     bash-completion \
     byzanz \
+    ccache \
     git \
     imagemagick \
     iputils-ping \
@@ -111,6 +112,7 @@ RUN pip3 install transforms3d ultralytics pandas numpy==1.21 opencv-python motra
 RUN apt-get update && apt-get install -y qtbase5-dev libqt5svg5-dev libzmq3-dev libdw-dev ros-noetic-ros-babel-fish \
 ros-$ROS_DISTRO-foxglove-bridge \
 ros-$ROS_DISTRO-map-server \
+ros-$ROS_DISTRO-octomap-server \
 ros-$ROS_DISTRO-rosmon \
 ros-$ROS_DISTRO-pybind11-catkin ros-$ROS_DISTRO-ros-numpy\
 && apt-get clean
