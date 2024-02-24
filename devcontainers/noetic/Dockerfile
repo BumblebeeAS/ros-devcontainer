@@ -117,6 +117,7 @@ ros-$ROS_DISTRO-rosmon \
 ros-$ROS_DISTRO-pybind11-catkin ros-$ROS_DISTRO-ros-numpy\
 && apt-get clean
 
+RUN pip3 install circle_fit pyvisgraph
 
 # configure services
 RUN mkdir -p /etc/supervisor/conf.d
